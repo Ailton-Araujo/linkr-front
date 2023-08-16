@@ -4,52 +4,76 @@ import LoginSignUpButton from "../../components/login, signup/buttons.jsx";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext.jsx";
+import AuthContext from "../../contexts/AuthContext.jsx";
 
 const Login = () => {
-    const navigate = useNavigate();
-    const [disable, setDisabled] = useState(false);
-    const [body, setBody] = useState({email: "", password: ""});
-    const { auth, loginAuth, setAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [disable, setDisabled] = useState(false);
+  const [body, setBody] = useState({ email: "", password: "" });
+  const { auth, loginAuth, setAuth } = useContext(AuthContext);
 
-    useEffect(() => {
-      if (auth && auth.token) {
+  useEffect(() => {
+    if (auth && auth.token) {
+      navigate("/timeline");
+    }
+  }, []);
+
+  const handleSubmit = (e) => {
+    if (body.email === "" || body.password === "") {
+      return alert("Todos os campos são obrigatórios!");
+    }
+    e.preventDefault();
+    setDisabled(true);
+    const promise = axios.post(`${process.env.REACT_APP_API_URI}/login`, body);
+    promise
+      .then((res) => {
+        loginAuth(res.data);
+        setAuth(res.data);
         navigate("/timeline");
-      }
-    }, []);
-
-    const handleSubmit = (e) => {
-        if(body.email === "" || body.password === ""){
-             return alert("Todos os campos são obrigatórios!")
-        };
-        e.preventDefault();
-        setDisabled(true);
-        const promise = axios.post(`${process.env.REACT_APP_API_URI}/login`, body);
-        promise.then((res) => {
-            loginAuth(res.data);
-            setAuth(res.data);
-            navigate("/timeline");
-        }).catch((err) => {
-            if(err.response.status === 401) {
-                setDisabled(false);
-                alert(`${err.response.data.message}`);
-            }
-        });
-    };
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          setDisabled(false);
+          alert(`${err.response.data.message}`);
+        }
+      });
+  };
   return (
     <Wrapper>
       <LogoContainer>
         <Logo>
           <h1>linkr</h1>
-          <p>save, share and discover <br/> the best links on the web</p>
+          <p>
+            save, share and discover <br /> the best links on the web
+          </p>
         </Logo>
       </LogoContainer>
       <FormContainer>
         <Form onSubmit={handleSubmit}>
-          <LoginSignUpInput setBody={setBody} body={body} placeholder={"e-mail"} name={"email"} value={body.email} type={"email"}></LoginSignUpInput>
-          <LoginSignUpInput setBody={setBody} body={body} placeholder={"password"} name={"password"} value={body.password} type={"password"}></LoginSignUpInput>
-          <LoginSignUpButton disable={disable} action={"Login In..."} purpose={"Log In"}></LoginSignUpButton> 
-          <p onClick={() => navigate("/signup")}>First time? Create an account!</p>
+          <LoginSignUpInput
+            setBody={setBody}
+            body={body}
+            placeholder={"e-mail"}
+            name={"email"}
+            value={body.email}
+            type={"email"}
+          ></LoginSignUpInput>
+          <LoginSignUpInput
+            setBody={setBody}
+            body={body}
+            placeholder={"password"}
+            name={"password"}
+            value={body.password}
+            type={"password"}
+          ></LoginSignUpInput>
+          <LoginSignUpButton
+            disable={disable}
+            action={"Login In..."}
+            purpose={"Log In"}
+          ></LoginSignUpButton>
+          <p onClick={() => navigate("/signup")}>
+            First time? Create an account!
+          </p>
         </Form>
       </FormContainer>
     </Wrapper>
@@ -79,43 +103,43 @@ const LogoContainer = styled.section`
     align-items: center;
     position: none;
     article {
-        margin: 0;
-        self-align: center;
-        top: initial;
-        transform: none;
-        position: none;
+      margin: 0;
+      self-align: center;
+      top: initial;
+      transform: none;
+      position: none;
     }
   }
 
   @media (max-width: 360px) {
     article {
-        h1 {
-            font-size: 5rem;
-        }
+      h1 {
+        font-size: 5rem;
+      }
 
-        p {
-            font-size: 1.5rem;
-        }
+      p {
+        font-size: 1.5rem;
+      }
     }
   }
 `;
 
 const Logo = styled.article`
-    position: absolute;
-    top: 20%;
-    transform: translateX(10%);
-    color: white;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
+  position: absolute;
+  top: 20%;
+  transform: translateX(10%);
+  color: white;
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
 
-    h1 {
-        font-family: 'Passion One', cursive;
-        font-size: 6rem;
-    }
+  h1 {
+    font-family: "Passion One", cursive;
+    font-size: 6rem;
+  }
 
-    p {
-        font-size: 2rem;
-    }
+  p {
+    font-size: 2rem;
+  }
 `;
 
 const FormContainer = styled.section`
@@ -128,7 +152,7 @@ const FormContainer = styled.section`
   align-items: center;
 
   p {
-    font-family: 'Lato', sans-serif;
+    font-family: "Lato", sans-serif;
     color: white;
     margin-top: 15px;
     line-height: 20px;

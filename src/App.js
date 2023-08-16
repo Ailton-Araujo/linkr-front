@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyles from "./Global/GlobalStyles";
 import ResetStyles from "./Global/ResetStyles";
-import SignUp from "./Pages/SignUp/SignUp";
-import Login from "./Pages/Login/Login";
-import { AuthProvider } from "./context/AuthContext";
+import { SignUp, Login, TimeLine } from "./Pages";
+import { AuthProvider } from "./contexts/AuthContext";
+import { UserInfoProvider } from "./contexts/UserInfoContext";
 import TopMenu from "./components/TopMenu/TopMenu";
 import HashtagPage from "./Pages/HashtagPage";
 
@@ -13,14 +13,16 @@ function App() {
       <ResetStyles />
       <GlobalStyles />
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Login />}></Route>
-            <Route path="/signup" element={<SignUp />}></Route>
-            <Route path="/timeline" element={<TopMenu />}></Route>
-            <Route path="/hashtag/:hashtag" element={<HashtagPage />}></Route>
-          </Routes>
-        </BrowserRouter>
+        <UserInfoProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Login />}></Route>
+              <Route path="/signup" element={<SignUp />}></Route>
+              <Route path="/timeline" element={<TopMenu />}></Route>
+              <Route path="/hashtag/:hashtag" element={<HashtagPage />}></Route>
+            </Routes>
+          </BrowserRouter>
+        </UserInfoProvider>
       </AuthProvider>
     </div>
   );

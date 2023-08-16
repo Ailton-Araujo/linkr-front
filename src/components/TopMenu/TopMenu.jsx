@@ -1,41 +1,16 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import AuthContext from "../../context/AuthContext";
 import { IoIosArrowDown } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import useUserInfo from "../../hooks/useUserInfo";
 
 const TopMenu = () => {
-  const { auth } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { userInfo } = useUserInfo();
+
   const [dropDown, setDropDown] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
-  const token = auth?.token;
-  const retrieveUserInfo = async (token) => {
-    const promise = axios.get(`${process.env.REACT_APP_API_URI}/userinfo`, {
-      headers: { authorization: `Bearer ${token}` },
-    });
-    promise
-      .then((res) => {
-        setUserInfo(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err.response.status);
-      });
-  };
 
   const dropMenu = () => {
     setDropDown(!dropDown);
   };
-
-  useEffect(() => {
-    if (auth && auth.token) {
-      retrieveUserInfo(token);
-    } else {
-      navigate("/");
-    }
-  }, []);
 
   const logout = () => {
     localStorage.clear();
