@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import AuthContext from "../../context/AuthContext";
-import {IoIosArrowUp} from "react-icons/io";
+import {IoIosArrowDown} from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -44,7 +44,7 @@ const TopMenu = () => {
             <h1>linkr</h1>
             <UserOptions onBlur={dropMenu} dropdown={dropDown} onClick={dropMenu}>
                 <button>
-                <IoIosArrowUp className="icon"></IoIosArrowUp>
+                <IoIosArrowDown className="icon"></IoIosArrowDown>
                 </button>
                 <img src={userInfo.image} alt={userInfo.image}/>
             </UserOptions>
@@ -80,7 +80,6 @@ const Navbar = styled.nav`
 const Logout = styled.div`
     height: ${props => props.dropdown ? "80px" : "50px"};
     width: 90px;
-    top: ${props => props.dropdown ? "0" : "-10"};
     right: 0;
     position: absolute;
     background-color: #171717;
@@ -132,7 +131,7 @@ const UserOptions = styled.div`
         border-radius: 20px;
         background-color: #171717;
         transition: transform 1s;
-        transform: ${props => props.dropdown ? "rotate(180deg)" : ""}
+        transform: ${props => props.dropdown ? "rotate(-180deg)" : ""}
     }
 
     &:hover {
