@@ -18,7 +18,8 @@ export default function CreateLinkr({ token }) {
       description: refText.current?.value,
       hashtags: refText.current?.value
         .split(/([#|＃][^\s]+)/g)
-        .filter((e) => e.match(/([#|＃][^\s]+)/g)),
+        .filter((e) => e.match(/([#|＃][^\s]+)/g))
+        .map((e) => e.replace("#", "")),
     };
 
     if (data.link === "") {
