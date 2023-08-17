@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
 import styled from "styled-components";
+import urlMetadata from "url-metadata";
 import useUserInfo from "../../hooks/useUserInfo";
 import { postLink } from "../../services/Api";
 
-export default function CreateLinkr({ token }) {
+export default function CreateLinkr({ token, postList, setPostList }) {
   const { userInfo } = useUserInfo();
   const [tryPublish, setTryPublish] = useState(false);
   const refLink = useRef("");
@@ -13,7 +14,7 @@ export default function CreateLinkr({ token }) {
     e.preventDefault();
     setTryPublish(true);
 
-    const data = {
+    const newPost = {
       link: refLink.current?.value,
       description: refText.current?.value,
       hashtags: refText.current?.value
@@ -22,18 +23,51 @@ export default function CreateLinkr({ token }) {
         .map((e) => e.replace("#", "")),
     };
 
-    if (data.link === "") {
+    // newPost = [
+    //   {
+    //     post: { description: data.description, id: response, link: data.link },
+    //     meta: {
+    //       title: metadata["og:title"],
+    //       description: metadata["og:description"],
+    //       image: metadata["og:image"],
+    //     },
+    //   },
+    // ];
+
+    if (newPost.link === "") {
       alert("O link é obrigatório");
       setTryPublish(false);
       return;
     }
 
-    function success() {
+    function success(data, newPost) {
       refLink.current.value = "";
       refText.current.value = "";
+      console.log(data);
+      urlMetadata(newPost.link).then((metadata) =>
+        setPostList((prevState) => [
+          {
+            post: {
+              description: newPost.description,
+              id: data.id,
+              link: newPost.link,
+              user: {
+                username: userInfo.username,
+                image: userInfo.image,
+              },
+            },
+            meta: {
+              title: metadata["og:title"],
+              description: metadata["og:description"],
+              image: metadata["og:image"],
+            },
+          },
+          ...prevState,
+        ])
+      );
       setTryPublish(false);
     }
-
+    console.log(postList);
     function failure(error) {
       refLink.current.value = "";
       refText.current.value = "";
@@ -45,7 +79,7 @@ export default function CreateLinkr({ token }) {
 
       setTryPublish(false);
     }
-    postLink(data, token, success, failure);
+    postLink(newPost, token, success, failure);
   }
   return (
     <CreateLinkrStyled bg={userInfo.image}>

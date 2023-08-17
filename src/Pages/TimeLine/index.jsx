@@ -39,13 +39,17 @@ export default function TimeLine() {
       <TopMenu />
       <TimeLineStyled>
         <h1>timeline</h1>
-        <CreateLinkr token={auth.token} />
+        <CreateLinkr
+          token={auth.token}
+          postList={postList}
+          setPostList={setPostList}
+        />
         {tryGetList ? (
           <h2>Loading</h2>
         ) : postList.length === 0 ? (
           <h2>{message}</h2>
         ) : (
-          postList.map((post) => <Linkr dataPost={post} />)
+          postList.map((post) => <Linkr key={post.post.id} dataPost={post} />)
         )}
       </TimeLineStyled>
     </>
