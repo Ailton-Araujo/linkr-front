@@ -37,7 +37,12 @@ export default function CreateLinkr({ token }) {
     function failure(error) {
       refLink.current.value = "";
       refText.current.value = "";
-      alert(error.response.data);
+      if (error.response) {
+        alert(error.response.data);
+      } else {
+        alert(error.message);
+      }
+
       setTryPublish(false);
     }
     postLink(data, token, success, failure);
@@ -82,6 +87,8 @@ const CreateLinkrStyled = styled.article`
     border-radius: 26.5px;
     background: ${({ bg }) => `url(${bg})`},
       lightgray -2.896px -0.135px / 109.434% 100.538% no-repeat;
+    background-size: 48px 48px;
+    background-position: center center;
   }
   form {
     width: calc(100% - 50px);
@@ -91,6 +98,7 @@ const CreateLinkrStyled = styled.article`
     justify-content: flex-start;
     gap: 5px;
     h2 {
+      margin: 0px;
       color: #707070;
       font-family: "Lato", sans-serif;
       font-size: 20px;
