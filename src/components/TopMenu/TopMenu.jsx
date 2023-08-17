@@ -15,7 +15,6 @@ const TopMenu = () => {
   const [dropDown, setDropDown] = useState(false);
   const [search, setSearch] = useState("");
   const [usersSearch, setUsersSearch] = useState([]);
-  const [message, setMessage] = useState("");
 
   const dropMenu = () => {
     setDropDown(!dropDown);
@@ -27,7 +26,6 @@ const TopMenu = () => {
   };
 
   function success(data) {
-    if (data.length === 0) setMessage("No user found");
     setUsersSearch(data);
   }
   function failure(error) {
@@ -172,17 +170,18 @@ const UserOptions = styled.div`
 `;
 
 const SearchBar = styled.div`
-    width: 563px;
+    width: 38vh;
     height: 45px;
     background-color: white;
     display: flex;
     align-items: center;
     border-radius: 8px;
     padding: 0 10px;
+    z-index: 1;
     input {
       border: none;
       vertical-align: middle;
-      width: 550px;
+      width: 35vh;
       height: 45px;
       font-family: "Lato", sans-serif;
       font-size: 19px;
@@ -198,7 +197,16 @@ const SearchBar = styled.div`
     fill: rgba(198, 198, 198, 1);
     font-size: 30px;
   }
-
+  @media (max-width: 600px) {
+    width: 350px;
+    input {
+      width: 320px;
+    }
+    position: absolute;
+    top: 40px;
+    left: calc(1vh - 160px);
+    margin: auto;
+  }
 `;
 
 const SearchBox = styled.div`
