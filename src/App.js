@@ -5,6 +5,7 @@ import { SignUp, Login, TimeLine } from "./Pages";
 import { AuthProvider } from "./contexts/AuthContext";
 import { UserInfoProvider } from "./contexts/UserInfoContext";
 import TopMenu from "./components/TopMenu/TopMenu";
+import UserPage from "./Pages/UserPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/timeline" element={<TimeLine />} />
+              <Route path="/user/:id" element={<UserPage />} />
             </Routes>
           </BrowserRouter>
         </UserInfoProvider>
