@@ -3,7 +3,6 @@ import HashTagsCard from "../../components/HashtagsCard";
 
 export default function Linkr({ dataPost }) {
   const { post, meta } = dataPost;
-  console.log(dataPost);
   function handleClick() {
     window.open(post.link, "_blank").focus();
   }

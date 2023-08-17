@@ -67,7 +67,7 @@ export default function CreateLinkr({ token, postList, setPostList }) {
       );
       setTryPublish(false);
     }
-    console.log(postList);
+
     function failure(error) {
       refLink.current.value = "";
       refText.current.value = "";
