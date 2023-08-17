@@ -61,4 +61,16 @@ function getUsername(id, token, success, failure) {
     });  
 }
 
-export { getUser, postLink, getTimeLine, getUserPosts, getUsername };
+function queryUsers(search, token, success, failure){
+  axios
+    .get(`/users?username=${search}`, tokenProvider(token))
+    .then(({ data }) => {
+      success(data);
+    })
+    .catch((error) => {
+      failure(error);
+      console.log(error);
+    });  
+}
+
+export { getUser, postLink, getTimeLine, getUserPosts, getUsername, queryUsers };

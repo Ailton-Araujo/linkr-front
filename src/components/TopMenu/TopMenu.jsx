@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useContext, useRef, useState } from "react";
 import styled from "styled-components";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoIosSearch } from "react-icons/io";
 import useUserInfo from "../../hooks/useUserInfo";
+import { DebounceInput } from 'react-debounce-input';
+import { queryUsers } from "../../services/Api";
+import AuthContext from "../../contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 const TopMenu = () => {
   const { userInfo } = useUserInfo();
+  const { auth } = useContext(AuthContext);
+  const ref = useRef(null);
 
   const [dropDown, setDropDown] = useState(false);
+  const [search, setSearch] = useState("");
+  const [usersSearch, setUsersSearch] = useState([]);
+  const [message, setMessage] = useState("");
 
   const dropMenu = () => {
     setDropDown(!dropDown);
@@ -17,10 +26,52 @@ const TopMenu = () => {
     window.location.reload();
   };
 
+  function success(data) {
+    if (data.length === 0) setMessage("No user found");
+    setUsersSearch(data);
+  }
+  function failure(error) {
+    console.log(error);
+  }
+
+  function handleChange(e){
+    if (e.target.value){
+      queryUsers(e.target.value, auth.token, success, failure)
+      setSearch(e.target.value);
+    }
+    else
+      setUsersSearch([]);
+  }
   return (
     <>
       <Navbar>
         <h1>linkr</h1>
+        <SearchBox>          
+          <SearchBar>
+            <DebounceInput
+              type="text"
+              placeholder="Search for people"
+              name="search"
+              value={search}
+              minLength={3}
+              debounceTimeout={300}
+              onChange={handleChange}
+              ref={ref}
+            />
+            <IoIosSearch className="icon"/>
+          </SearchBar>
+          <Users>
+            { usersSearch.length > 0 ? 
+            usersSearch.map(user => 
+              <Link to={`/user/${user.id}`}>
+                <User key={user.id}>
+                    <img src={user.image} alt={`user ${user.username} image`}/>
+                    <p>{user.username}</p>
+                </User>
+              </Link>)
+            : ""}
+          </Users>
+        </SearchBox>
         <UserOptions onBlur={dropMenu} dropdown={dropDown} onClick={dropMenu}>
           <button>
             <IoIosArrowDown className="icon"></IoIosArrowDown>
@@ -36,7 +87,7 @@ const TopMenu = () => {
 };
 
 const Navbar = styled.nav`
-  height: 50px;
+  height: 72px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -119,4 +170,66 @@ const UserOptions = styled.div`
     cursor: pointer;
   }
 `;
+
+const SearchBar = styled.div`
+    width: 563px;
+    height: 45px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    padding: 0 10px;
+    input {
+      border: none;
+      vertical-align: middle;
+      width: 550px;
+      height: 45px;
+      font-family: "Lato", sans-serif;
+      font-size: 19px;
+      line-height: 23px;
+    }
+    input::placeholder{
+        color: rgba(198, 198, 198, 1);
+      }
+    input:focus{
+      outline: none;
+    }
+    .icon {
+    fill: rgba(198, 198, 198, 1);
+    font-size: 30px;
+  }
+
+`;
+
+const SearchBox = styled.div`
+    position: relative;
+    a:-webkit-any-link {
+      text-decoration: none;
+      color: inherit;
+  }
+`
+
+const Users = styled.div`
+  position: absolute;
+  z-index: 1;
+  border-radius: 8px;
+  background-color: rgba(231, 231, 231, 1);
+  width: 563px;
+`
+
+const User = styled.div`
+  height: 60px;
+  font-family: "Lato", sans-serif;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  img {
+    object-fit: cover;
+    height: 39px;
+    width: 39px;
+    border-radius: 50%;
+    margin: 12px;
+  }
+`
+
 export default TopMenu;
