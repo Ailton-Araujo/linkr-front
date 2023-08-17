@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
+import Linkr from "./TimeLine/LInkr";
 
 export default function HashtagPage() {
   const apiUrl = "http://localhost:5000";
@@ -32,7 +33,7 @@ export default function HashtagPage() {
       <div>
         <SCContent>
           {posts.map((post) => (
-            <div>{post.description}</div>
+            <Linkr key={post.post.id} dataPost={post} />
           ))}
 
           {error && (
