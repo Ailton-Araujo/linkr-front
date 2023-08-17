@@ -19,6 +19,7 @@ export default function HashtagPage() {
         setPosts(arrayPost);
       })
       .catch((error) => {
+        console.log(error);
         alert(error.message);
       });
   });
