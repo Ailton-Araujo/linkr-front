@@ -9,6 +9,7 @@ export default function HashtagPage() {
   const { hashtag } = useParams();
 
   const [posts, setPosts] = useState([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     axios
@@ -17,10 +18,11 @@ export default function HashtagPage() {
       })
       .then(({ data: arrayPost }) => {
         setPosts(arrayPost);
+        setError(false);
       })
       .catch((error) => {
+        setError(true);
         console.log(error);
-        alert(error.message);
       });
   });
 
@@ -32,6 +34,12 @@ export default function HashtagPage() {
           {posts.map((post) => (
             <div>{post.description}</div>
           ))}
+
+          {error && (
+            <SCErrorMessage>
+              There was an error loading the posts!
+            </SCErrorMessage>
+          )}
         </SCContent>
         <SCTrendingArea />
       </div>
@@ -73,4 +81,10 @@ const SCTitle = styled.h1`
   color: #fff;
   font-size: 43px;
   font-weight: 700;
+`;
+
+const SCErrorMessage = styled.div`
+  color: #d8334a;
+  font-size: 20px;
+  font-weight: 400;
 `;
