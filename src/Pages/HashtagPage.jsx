@@ -36,7 +36,7 @@ export default function HashtagPage() {
     <>
       <TopMenu />
       <SCContainer>
-        <SCTitle># {hashtag}</SCTitle>
+        <SCTitle data-test="hashtag-title"># {hashtag}</SCTitle>
         <div>
           <SCContent>
             {loading ? (
