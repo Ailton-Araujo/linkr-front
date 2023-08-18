@@ -27,7 +27,7 @@ const SignUp = () => {
     }
     e.preventDefault();
     setDisabled(true);
-    const promise = axios.post(`${process.env.REACT_APP_API_URI}/signup`, body);
+    const promise = axios.post(`${process.env.REACT_APP_API_URL}/signup`, body);
     promise
       .then((res) => {
         navigate("/");
