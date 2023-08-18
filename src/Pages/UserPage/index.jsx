@@ -1,10 +1,10 @@
 import { useEffect, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
 import AuthContext from "../../contexts/AuthContext";
 import TopMenu from "../../components/TopMenu/TopMenu";
 import Linkr from "../TimeLine/LInkr";
 import { getUserPosts, getUsername} from "../../services/Api";
+import { TimeLineStyled } from "../TimeLine";
 
 export default function UserPage() {
   const { auth } = useContext(AuthContext);
@@ -62,26 +62,3 @@ export default function UserPage() {
   );
 }
 
-const TimeLineStyled = styled.main`
-  margin-top: 30px;
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  h1 {
-    margin-top: 100px;
-    margin-bottom: 45px;
-    color: #fff;
-    font-family: "Oswald", sans-serif;
-    font-size: 43px;
-    font-weight: 700;
-  }
-  h2 {
-    margin-top: 60px;
-    color: #fff;
-    font-family: "Oswald", sans-serif;
-    font-size: 26px;
-    font-weight: 700;
-  }
-`;

@@ -36,6 +36,7 @@ const Login = () => {
           setDisabled(false);
           alert(`${err.response.data.message}`);
         }
+        setDisabled(false);
       });
   };
   return (
