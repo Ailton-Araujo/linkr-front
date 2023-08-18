@@ -85,6 +85,19 @@ function postLike(newLike, token, success, failure) {
     });
 }
 
+
+function editPost(id, newDesc, token, success, failure){
+  axios
+    .patch(`/posts/${id}`, newDesc, tokenProvider(token))
+    .then(({ data }) => {
+      success(data);
+    })
+    .catch((error) => {
+      failure(error);
+      console.log(error);
+    });
+}
+
 export {
   getUser,
   postLink,
@@ -92,5 +105,7 @@ export {
   getUserPosts,
   getUsername,
   queryUsers,
+  editPost,
   postLike,
 };
+

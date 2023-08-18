@@ -52,7 +52,7 @@ export default function TimeLine() {
   );
 }
 
-const TimeLineStyled = styled.main`
+export const TimeLineStyled = styled.main`
   margin-top: 30px;
   margin-bottom: 15px;
   display: flex;
@@ -74,4 +74,8 @@ const TimeLineStyled = styled.main`
     font-size: 26px;
     font-weight: 700;
   }
+  @media (max-width: 800px) {
+    margin-top: 60px;
+  }
 `;
+

@@ -1,19 +1,32 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { FaPencilAlt } from "react-icons/fa"
 import AuthContext from "../../contexts/AuthContext";
 import useUserInfo from "../../hooks/useUserInfo";
 import HashTagsCard from "../../components/HashtagsCard";
-import { postLike } from "../../services/Api";
+import { postLike,editPost } from "../../services/Api";
+
 
 export default function Linkr({ dataPost }) {
   const { auth } = useContext(AuthContext);
   const { userInfo } = useUserInfo();
   const [tryLike, setTryLike] = useState(false);
   const [userLiked, setUserLiked] = useState(false);
+  const [editor, setEditor] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [text, setText] = useState(post.description);
+  const [original, setOriginal] = useState(post.description);
   const { post, meta } = dataPost;
+  const inputReference = useRef(null);
 
+  useEffect(() => {
+    if (editor)
+        inputReference.current.focus();
+  }, [editor]);
+  
+  
   function handleLike() {
     setTryLike(true);
     const newLike = {
@@ -38,11 +51,50 @@ export default function Linkr({ dataPost }) {
     }
     postLike(newLike, auth.token, success, failure);
   }
+  
   function handleLink() {
     window.open(post.link, "_blank").focus();
   }
 
+  function toggleEditMode(){
+    handleCancelChanges()
+    setEditor(!editor);
+  }
+
+function handleChange(e){
+    setText(e.target.value);
+}
+
+function handleCancelChanges(){
+  setText(original);
+  setEditor(false);
+}
+
+function handleKeyDown(e) {
+  if (e.key === 'Escape'){
+      handleCancelChanges();
+  }
+}
+
+function success(data){
+  setOriginal(text);
+  setEditor(false);
+  setLoading(false);
+}
+
+function failure(error){
+  alert("Não foi possível realizar a edição. Tente novamente.")
+  setLoading(false);
+}
+
+function handleSubmit(e, id){
+    e.preventDefault();
+    setLoading(true);
+    editPost(id, {description: text}, auth.token, success, failure)
+}
+
   return (
+
     <PostStyled data-test="post" bg={post.user.image} bgspan={meta.image}>
       <section>
         <div></div>
@@ -55,14 +107,21 @@ export default function Linkr({ dataPost }) {
           {userLiked ? <Liked /> : <NotLiked />}
         </button>
       </section>
-
       <div>
-        <h3 data-test="username">
-          <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
-        </h3>
-        <h4 data-test="description">
-          <HashTagsCard>{post.description}</HashTagsCard>
-        </h4>
+        <form onSubmit={e => handleSubmit(e, post.id)}>
+          <h3 data-test="username">
+            <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
+            {post.user.id === userInfo.id ? 
+           <button type="button" data-test="edit-btn" onClick={toggleEditMode}><FaPencilAlt className="icon"/></button> : ""
+            }
+          </h3>
+          <h4 data-test="description">
+              { !editor ? 
+              <HashTagsCard>{original}</HashTagsCard> 
+              : <input type="text" value={text} onChange={handleChange} ref={inputReference} onKeyDown={handleKeyDown} disabled={loading}/> }
+          </h4>
+        </form>
+        
         <div data-test="link" onClick={handleLink}>
           <section>
             <h3>{meta.title}</h3>
@@ -92,6 +151,7 @@ const PostStyled = styled.article`
     text-decoration: none;
     color: inherit;
   }
+
   section {
     position: relative;
     div {
@@ -115,6 +175,19 @@ const PostStyled = styled.article`
         cursor: not-allowed;
       }
     }
+
+  .icon{
+    color: white;
+    width: 23px;
+  }
+
+  button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    outline: inherit;
   }
 
   div:nth-child(2) {
@@ -125,6 +198,8 @@ const PostStyled = styled.article`
       font-size: 19px;
       line-height: 25px;
       font-weight: 400;
+      display: flex;
+      justify-content: space-between;
     }
     h4 {
       padding: 10px 0px;
@@ -132,6 +207,19 @@ const PostStyled = styled.article`
       font-family: "Lato", sans-serif;
       font-size: 17px;
       font-weight: 400;
+      input {
+        padding: 0;
+        color: #b7b7b7;
+        font-family: "Lato", sans-serif;
+        font-size: 17px;
+        font-weight: 400;
+        background-color: inherit;
+        border: none;
+        width: 100%;
+      }
+      input:focus{
+        outline: none;
+      }
     }
     div {
       width: 100%;
