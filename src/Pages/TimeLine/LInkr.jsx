@@ -68,14 +68,14 @@ function handleSubmit(e, id){
 }
 
   return (
-    <PostStyled bg={post.user.image} bgspan={meta.image}>
+    <PostStyled bg={post.user.image} bgspan={meta.image} data-test="post">
       <div></div>
       <div>
         <form onSubmit={e => handleSubmit(e, post.id)}>
           <h3>
             <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
             {post.user.id === userInfo.id ? 
-           <button type="submit"><FaPencilAlt className="icon"/></button> : ""
+           <button type="submit" data-test="edit-btn"><FaPencilAlt className="icon"/></button> : ""
             }
           </h3>
           <h4>
