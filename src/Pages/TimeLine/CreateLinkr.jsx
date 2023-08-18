@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import styled from "styled-components";
-import urlMetadata from "url-metadata";
 import useUserInfo from "../../hooks/useUserInfo";
 import { postLink } from "../../services/Api";
 
@@ -23,48 +22,16 @@ export default function CreateLinkr({ token, postList, setPostList }) {
         .map((e) => e.replace("#", "")),
     };
 
-    // newPost = [
-    //   {
-    //     post: { description: data.description, id: response, link: data.link },
-    //     meta: {
-    //       title: metadata["og:title"],
-    //       description: metadata["og:description"],
-    //       image: metadata["og:image"],
-    //     },
-    //   },
-    // ];
-
     if (newPost.link === "") {
       alert("O link é obrigatório");
       setTryPublish(false);
       return;
     }
 
-    function success(data, newPost) {
+    function success(data) {
       refLink.current.value = "";
       refText.current.value = "";
-      console.log(data);
-      urlMetadata(newPost.link).then((metadata) =>
-        setPostList((prevState) => [
-          {
-            post: {
-              description: newPost.description,
-              id: data.id,
-              link: newPost.link,
-              user: {
-                username: userInfo.username,
-                image: userInfo.image,
-              },
-            },
-            meta: {
-              title: metadata["og:title"],
-              description: metadata["og:description"],
-              image: metadata["og:image"],
-            },
-          },
-          ...prevState,
-        ])
-      );
+      setPostList((prevState) => [data, ...prevState]);
       setTryPublish(false);
     }
 
@@ -81,6 +48,7 @@ export default function CreateLinkr({ token, postList, setPostList }) {
     }
     postLink(newPost, token, success, failure);
   }
+
   return (
     <CreateLinkrStyled bg={userInfo.image}>
       <div></div>
