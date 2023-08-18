@@ -27,14 +27,14 @@ export default function Trending() {
   }, []);
 
   return (
-    <SCContainer>
+    <SCContainer data-test="trending">
       <h1>trending</h1>
       <hr />
 
       <div>
         {trending.map(({ hashtag }) => (
           <Link to={`/hashtag/${hashtag}`}>
-            <SCHashtag># {hashtag}</SCHashtag>
+            <SCHashtag data-test="hashtag"># {hashtag}</SCHashtag>
           </Link>
         ))}
 
