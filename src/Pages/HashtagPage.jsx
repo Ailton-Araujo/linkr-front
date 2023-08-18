@@ -70,6 +70,7 @@ const SCContainer = styled.div`
   padding-bottom: 125px;
 
   > div {
+    position: relative;
     width: 100%;
     display: flex;
     gap: 25px;
@@ -80,13 +81,14 @@ const SCContainer = styled.div`
 `;
 
 const SCContent = styled.div`
-  width: 600px;
+  width: auto;
   height: auto;
 `;
 
 const SCTrendingArea = styled.div`
   width: 300px;
-  height: auto;
+  height: 100%;
+  background-color: red;
 `;
 
 const SCTitle = styled.h1`
