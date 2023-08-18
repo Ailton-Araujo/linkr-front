@@ -3,60 +3,71 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import Linkr from "./TimeLine/LInkr";
+import TopMenu from "../components/TopMenu/TopMenu";
 
 export default function HashtagPage() {
-  const apiUrl = "http://localhost:5000";
-  const jwt = localStorage.getItem("auth");
+  const apiUrl = process.env.REACT_APP_API_URI;
+  const { token } = JSON.parse(localStorage.getItem("auth"));
   const { hashtag } = useParams();
 
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
+
     axios
       .get(`${apiUrl}/hashtag/${hashtag}`, {
-        headers: { Authorization: `Bearer ${jwt}` },
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then(({ data: arrayPost }) => {
         setPosts(arrayPost);
         setError(false);
+        setLoading(false);
       })
       .catch((error) => {
         setError(true);
-        console.log(error);
+        setLoading(false);
       });
-  });
+  }, [hashtag]);
 
   return (
-    <SCContainer>
-      <SCTitle># {hashtag}</SCTitle>
-      <div>
-        <SCContent>
-          {posts.map((post) => (
-            <Linkr key={post.post.id} dataPost={post} />
-          ))}
+    <>
+      <TopMenu />
+      <SCContainer>
+        <SCTitle># {hashtag}</SCTitle>
+        <div>
+          <SCContent>
+            {loading ? (
+              <SCLoading>Loading...</SCLoading>
+            ) : (
+              posts.map((post) => <Linkr key={post.post.id} dataPost={post} />)
+            )}
 
-          {error && (
-            <SCErrorMessage>
-              There was an error loading the posts!
-            </SCErrorMessage>
-          )}
-        </SCContent>
-        <SCTrendingArea />
-      </div>
-    </SCContainer>
+            {error && (
+              <SCErrorMessage>
+                There was an error loading the posts!
+              </SCErrorMessage>
+            )}
+          </SCContent>
+          <SCTrendingArea />
+        </div>
+      </SCContainer>
+    </>
   );
 }
 
 const SCContainer = styled.div`
   font-family: Oswald;
-  width: 100vw;
+  width: 100%;
   background: #333333;
   height: auto;
   color: #ffffff;
   padding-left: 250px;
   padding-right: 250px;
   padding-top: 125px;
+  padding-bottom: 125px;
 
   > div {
     width: 100%;
@@ -88,4 +99,12 @@ const SCErrorMessage = styled.div`
   color: #d8334a;
   font-size: 20px;
   font-weight: 400;
+`;
+
+const SCLoading = styled.div`
+  margin-top: 60px;
+  color: #fff;
+  font-family: "Oswald", sans-serif;
+  font-size: 26px;
+  font-weight: 700;
 `;
