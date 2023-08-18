@@ -58,10 +58,10 @@ function getUsername(id, token, success, failure) {
     .catch((error) => {
       failure(error);
       console.log(error);
-    });  
+    });
 }
 
-function queryUsers(search, token, success, failure){
+function queryUsers(search, token, success, failure) {
   axios
     .get(`/users?username=${search}`, tokenProvider(token))
     .then(({ data }) => {
@@ -70,7 +70,27 @@ function queryUsers(search, token, success, failure){
     .catch((error) => {
       failure(error);
       console.log(error);
-    });  
+    });
 }
 
-export { getUser, postLink, getTimeLine, getUserPosts, getUsername, queryUsers };
+function postLike(newLike, token, success, failure) {
+  axios
+    .post("/likes", newLike, tokenProvider(token))
+    .then(({ data }) => {
+      success(data);
+    })
+    .catch((error) => {
+      console.log(error);
+      failure(error);
+    });
+}
+
+export {
+  getUser,
+  postLink,
+  getTimeLine,
+  getUserPosts,
+  getUsername,
+  queryUsers,
+  postLike,
+};

@@ -1,27 +1,73 @@
-import styled from "styled-components";
-import HashTagsCard from "../../components/HashtagsCard";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import AuthContext from "../../contexts/AuthContext";
+import useUserInfo from "../../hooks/useUserInfo";
+import HashTagsCard from "../../components/HashtagsCard";
+import { postLike } from "../../services/Api";
 
 export default function Linkr({ dataPost }) {
+  const { auth } = useContext(AuthContext);
+  const { userInfo } = useUserInfo();
+  const [tryLike, setTryLike] = useState(false);
+  const [userLiked, setUserLiked] = useState(false);
   const { post, meta } = dataPost;
-  
-  function handleClick() {
+
+  function handleLike() {
+    setTryLike(true);
+    const newLike = {
+      userId: userInfo.id,
+      postId: post.id,
+      type: "",
+    };
+    if (!userLiked) newLike.type = "like";
+    if (userLiked) newLike.type = "dislike";
+
+    function success(data) {
+      setUserLiked(data);
+      setTryLike(false);
+    }
+    function failure(error) {
+      if (error.response) {
+        alert(error.response.data);
+      } else {
+        alert(error.message);
+      }
+      setTryLike(false);
+    }
+    postLike(newLike, auth.token, success, failure);
+  }
+  function handleLink() {
     window.open(post.link, "_blank").focus();
   }
 
   return (
-    <PostStyled bg={post.user.image} bgspan={meta.image}>
-      <div></div>
+    <PostStyled data-test="post" bg={post.user.image} bgspan={meta.image}>
+      <section>
+        <div></div>
+        <button
+          data-test="like-btn"
+          disabled={tryLike}
+          onClick={handleLike}
+          type="button"
+        >
+          {userLiked ? <Liked /> : <NotLiked />}
+        </button>
+      </section>
+
       <div>
-        <h3><Link to={`/user/${post.user.id}`}>{post.user.username}</Link></h3>
-        <h4>
+        <h3 data-test="username">
+          <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
+        </h3>
+        <h4 data-test="description">
           <HashTagsCard>{post.description}</HashTagsCard>
         </h4>
-        <div onClick={handleClick}>
+        <div data-test="link" onClick={handleLink}>
           <section>
             <h3>{meta.title}</h3>
             <h4>{meta.description}</h4>
-            <a href={post.link}>{post.link}</a>
+            <h5 href={post.link}>{post.link}</h5>
           </section>
           <div></div>
         </div>
@@ -43,19 +89,34 @@ const PostStyled = styled.article`
   background: #171717;
 
   a:-webkit-any-link {
-  text-decoration: none;
-  color: inherit;
+    text-decoration: none;
+    color: inherit;
+  }
+  section {
+    position: relative;
+    div {
+      width: 50px;
+      height: 50px;
+      border-radius: 26.5px;
+      background: ${({ bg }) => `url(${bg})`},
+        lightgray -2.896px -0.135px / 109.434% 100.538% no-repeat;
+      background-size: 50px 50px;
+      background-position: center center;
+    }
+    button {
+      padding: 0px;
+      border: none;
+      background: none;
+      position: absolute;
+      top: 65px;
+      left: 12.5px;
+      cursor: pointer;
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
   }
 
-  div:nth-child(1) {
-    width: 50px;
-    height: 50px;
-    border-radius: 26.5px;
-    background: ${({ bg }) => `url(${bg})`},
-      lightgray -2.896px -0.135px / 109.434% 100.538% no-repeat;
-    background-size: 50px 50px;
-    background-position: center center;
-  }
   div:nth-child(2) {
     width: calc(100% - 50px);
     h3 {
@@ -82,26 +143,22 @@ const PostStyled = styled.article`
       align-items: center;
       section {
         width: calc(100% - 31%);
+        height: 100%;
         padding: 15px;
+        font-family: "Lato", sans-serif;
+        font-weight: 400;
         cursor: pointer;
         h3 {
           color: #cecece;
-          font-family: "Lato", sans-serif;
           font-size: 16px;
-          font-weight: 400;
         }
         h4 {
           color: #9b9595;
-          font-family: "Lato", sans-serif;
           font-size: 11px;
-          font-weight: 400;
         }
-        a {
+        h5 {
           color: #cecece;
-          font-family: "Lato", sans-serif;
           font-size: 11px;
-          font-weight: 400;
-          text-decoration: none;
         }
       }
       div {
@@ -116,4 +173,15 @@ const PostStyled = styled.article`
       }
     }
   }
+`;
+
+const Liked = styled(AiFillHeart)`
+  width: 25px;
+  height: 25px;
+  color: #ac0000;
+`;
+const NotLiked = styled(AiOutlineHeart)`
+  width: 25px;
+  height: 25px;
+  color: #fff;
 `;
