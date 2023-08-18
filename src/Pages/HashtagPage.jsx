@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import Linkr from "./TimeLine/LInkr";
 import TopMenu from "../components/TopMenu/TopMenu";
+import Trending from "../components/Trending";
 
 export default function HashtagPage() {
   const apiUrl = process.env.REACT_APP_API_URI;
@@ -51,7 +52,7 @@ export default function HashtagPage() {
               </SCErrorMessage>
             )}
           </SCContent>
-          <SCTrendingArea />
+          <Trending />
         </div>
       </SCContainer>
     </>
@@ -60,17 +61,15 @@ export default function HashtagPage() {
 
 const SCContainer = styled.div`
   font-family: Oswald;
-  width: 100%;
+  width: 945px;
   background: #333333;
   height: auto;
   color: #ffffff;
-  padding-left: 250px;
-  padding-right: 250px;
+  margin: auto;
   padding-top: 125px;
   padding-bottom: 125px;
 
   > div {
-    position: relative;
     width: 100%;
     display: flex;
     gap: 25px;
@@ -81,14 +80,8 @@ const SCContainer = styled.div`
 `;
 
 const SCContent = styled.div`
-  width: auto;
+  width: 360px;
   height: auto;
-`;
-
-const SCTrendingArea = styled.div`
-  width: 300px;
-  height: 100%;
-  background-color: red;
 `;
 
 const SCTitle = styled.h1`
