@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { FaPencilAlt } from "react-icons/fa"
 import { useContext, useEffect, useRef, useState } from "react";
 import UserInfoContext from "../../contexts/UserInfoContext";
-import axios from "axios";
 import { editPost } from "../../services/Api";
 import AuthContext from "../../contexts/AuthContext";
 
@@ -28,6 +27,7 @@ export default function Linkr({ dataPost }) {
   }
 
   function toggleEditMode(){
+    handleCancelChanges()
     setEditor(!editor);
 }
 
@@ -47,8 +47,8 @@ function handleKeyDown(e) {
 }
 
 function success(data){
-  console.log(data)
   setOriginal(text);
+  setEditor(false);
   setLoading(false);
 }
 
@@ -59,12 +59,8 @@ function failure(error){
 
 function handleSubmit(e, id){
     e.preventDefault();
-    if(editor){
-      setLoading(true);
-      editPost(id, {description: text}, auth.token, success, failure)
-    }
-    else
-      toggleEditMode();
+    setLoading(true);
+    editPost(id, {description: text}, auth.token, success, failure)
 }
 
   return (
@@ -75,12 +71,12 @@ function handleSubmit(e, id){
           <h3>
             <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
             {post.user.id === userInfo.id ? 
-           <button type="submit" data-test="edit-btn"><FaPencilAlt className="icon"/></button> : ""
+           <button type="button" data-test="edit-btn" onClick={toggleEditMode}><FaPencilAlt className="icon"/></button> : ""
             }
           </h3>
           <h4>
               { !editor ? 
-              <HashTagsCard>{post.description}</HashTagsCard> 
+              <HashTagsCard>{original}</HashTagsCard> 
               : <input type="text" value={text} onChange={handleChange} ref={inputReference} onKeyDown={handleKeyDown} disabled={loading}/> }
           </h4>
         </form>
