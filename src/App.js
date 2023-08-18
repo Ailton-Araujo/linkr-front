@@ -4,7 +4,7 @@ import ResetStyles from "./Global/ResetStyles";
 import { SignUp, Login, TimeLine } from "./Pages";
 import { AuthProvider } from "./contexts/AuthContext";
 import { UserInfoProvider } from "./contexts/UserInfoContext";
-import TopMenu from "./components/TopMenu/TopMenu";
+import HashtagPage from "./Pages/HashtagPage";
 import UserPage from "./Pages/UserPage";
 
 function App() {
@@ -16,9 +16,10 @@ function App() {
         <UserInfoProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/timeline" element={<TimeLine />} />
+              <Route path="/" element={<Login />}></Route>
+              <Route path="/signup" element={<SignUp />}></Route>
+              <Route path="/timeline" element={<TimeLine />}></Route>
+              <Route path="/hashtag/:hashtag" element={<HashtagPage />}></Route>
               <Route path="/user/:id" element={<UserPage />} />
             </Routes>
           </BrowserRouter>

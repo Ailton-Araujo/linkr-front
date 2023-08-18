@@ -5,24 +5,38 @@ import useUserInfo from "../../hooks/useUserInfo";
 import { DebounceInput } from 'react-debounce-input';
 import { queryUsers } from "../../services/Api";
 import AuthContext from "../../contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const TopMenu = () => {
   const { userInfo } = useUserInfo();
   const { auth } = useContext(AuthContext);
   const ref = useRef(null);
 
-  const [dropDown, setDropDown] = useState(false);
+  const [dropDown, setDropDown] = useState("up");
   const [search, setSearch] = useState("");
   const [usersSearch, setUsersSearch] = useState([]);
 
-  const dropMenu = () => {
-    setDropDown(!dropDown);
+  const navigate = useNavigate("/");
+
+  const dropMenu = (dropDown) => {
+    if(dropDown === "up"){
+      setDropDown("down");
+    } else {
+      setDropDown("up");
+    };
+  };
+
+  const onBlurDropMenu = (dropDown) => {
+    if(dropDown === "down"){
+      setDropDown("up");
+    } else {
+      return;
+    }
   };
 
   const logout = () => {
     localStorage.clear();
-    window.location.reload();
+    navigate("/");
   };
 
   function success(data) {
@@ -75,10 +89,10 @@ const TopMenu = () => {
             : ""}
           </Users>
         </SearchBox>
-        <UserOptions onBlur={dropMenu} dropdown={dropDown} onClick={dropMenu}>
-          <button>
+        <UserOptions onBlur={() => onBlurDropMenu(dropDown)} dropdown={dropDown} onClick={() => { dropMenu(dropDown) }}>
+          <div>
             <IoIosArrowDown className="icon"></IoIosArrowDown>
-          </button>
+          </div>
           <img src={userInfo.image} alt={userInfo.image} />
         </UserOptions>
       </Navbar>
@@ -99,7 +113,7 @@ const Navbar = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 5;
 
   h1 {
     color: white;
@@ -113,16 +127,18 @@ const Navbar = styled.nav`
 `;
 
 const Logout = styled.div`
-  height: ${(props) => (props.dropdown ? "80px" : "50px")};
+  height: ${(props) => (props.dropdown === "down" ? "100px" : "72px")};
   width: 90px;
+  top: 0;
   right: 0;
-  position: absolute;
+  position: fixed;
   background-color: #171717;
   transition: height 1s;
   border-radius: 0 15px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  z-index: 4;
 
   p {
     color: white;
@@ -137,12 +153,14 @@ const Logout = styled.div`
   }
 `;
 
-const UserOptions = styled.div`
+const UserOptions = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 80px;
   margin-right: 0.5rem;
+  background-color: #171717;
+  border: none;
   img {
     object-fit: cover;
     height: 40px;
@@ -156,9 +174,9 @@ const UserOptions = styled.div`
     font-size: 1em;
   }
 
-  button {
+  div {
     width: 40px;
-    height: 40px;
+    height: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -166,10 +184,14 @@ const UserOptions = styled.div`
     border-radius: 20px;
     background-color: #171717;
     transition: transform 1s;
-    transform: ${(props) => (props.dropdown ? "rotate(-180deg)" : "")};
+    transform: ${(props) => (props.dropdown === "down" ? "rotate(-180deg)" : "")};
   }
 
   &:hover {
+    cursor: pointer;
+  }
+
+  button:hover {
     cursor: pointer;
   }
 `;
@@ -182,6 +204,8 @@ const SearchBar = styled.div`
     align-items: center;
     border-radius: 8px;
     padding: 0 10px;
+    z-index: 5;
+
     input {
       border: none;
       vertical-align: middle;
@@ -223,7 +247,7 @@ const SearchBox = styled.div`
 
 const Users = styled.div`
   position: absolute;
-  z-index: 1;
+  z-index: 5;
   border-radius: 8px;
   background-color: rgba(231, 231, 231, 1);
   width: 563px;
