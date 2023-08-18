@@ -53,7 +53,7 @@ function success(data){
 }
 
 function failure(error){
-  console.log(error)
+  alert("Não foi possível realizar a edição. Tente novamente.")
   setLoading(false);
 }
 
