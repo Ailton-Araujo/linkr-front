@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import HashTagsCard from "../../components/HashtagsCard";
+import { Link } from "react-router-dom";
 
 export default function Linkr({ dataPost }) {
   const { post, meta } = dataPost;
+  
   function handleClick() {
     window.open(post.link, "_blank").focus();
   }
@@ -11,7 +13,7 @@ export default function Linkr({ dataPost }) {
     <PostStyled bg={post.user.image} bgspan={meta.image}>
       <div></div>
       <div>
-        <h3>{post.user.username}</h3>
+        <h3><Link to={`/user/${post.user.id}`}>{post.user.username}</Link></h3>
         <h4>
           <HashTagsCard>{post.description}</HashTagsCard>
         </h4>
@@ -39,6 +41,11 @@ const PostStyled = styled.article`
   border: none;
   border-radius: 16px;
   background: #171717;
+
+  a:-webkit-any-link {
+  text-decoration: none;
+  color: inherit;
+  }
 
   div:nth-child(1) {
     width: 50px;

@@ -6,6 +6,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { UserInfoProvider } from "./contexts/UserInfoContext";
 import TopMenu from "./components/TopMenu/TopMenu";
 import HashtagPage from "./Pages/HashtagPage";
+import UserPage from "./Pages/UserPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Route path="/signup" element={<SignUp />}></Route>
               <Route path="/timeline" element={<TopMenu />}></Route>
               <Route path="/hashtag/:hashtag" element={<HashtagPage />}></Route>
+              <Route path="/user/:id" element={<UserPage />} />
             </Routes>
           </BrowserRouter>
         </UserInfoProvider>
