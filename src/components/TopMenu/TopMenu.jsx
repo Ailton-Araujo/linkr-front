@@ -52,8 +52,12 @@ const TopMenu = () => {
       setSearch(e.target.value);
     }
     else
+    {
       setUsersSearch([]);
+      setSearch("")
+    }
   }
+
   return (
     <>
       <Navbar>
@@ -69,14 +73,15 @@ const TopMenu = () => {
               debounceTimeout={300}
               onChange={handleChange}
               ref={ref}
-            />
+              data-test="search"
+              />
             <IoIosSearch className="icon"/>
           </SearchBar>
           <Users>
-            { usersSearch.length > 0 ? 
+            { usersSearch.length > 0 && search ? 
             usersSearch.map(user => 
-              <Link to={`/user/${user.id}`}>
-                <User key={user.id}>
+              <Link to={`/user/${user.id}`} key={user.id}>
+                <User data-test="user-search">
                     <img src={user.image} alt={`user ${user.username} image`}/>
                     <p>{user.username}</p>
                 </User>
@@ -192,7 +197,7 @@ const UserOptions = styled.button`
 `;
 
 const SearchBar = styled.div`
-    width: 38vh;
+    width: 563px;
     height: 45px;
     background-color: white;
     display: flex;
@@ -200,10 +205,11 @@ const SearchBar = styled.div`
     border-radius: 8px;
     padding: 0 10px;
     z-index: 5;
+
     input {
       border: none;
       vertical-align: middle;
-      width: 35vh;
+      width: 550px;
       height: 45px;
       font-family: "Lato", sans-serif;
       font-size: 19px;
@@ -219,7 +225,7 @@ const SearchBar = styled.div`
     fill: rgba(198, 198, 198, 1);
     font-size: 30px;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     width: 350px;
     input {
       width: 320px;
@@ -227,7 +233,7 @@ const SearchBar = styled.div`
     position: absolute;
     top: 40px;
     left: calc(1vh - 160px);
-    margin: auto;
+    margin: 15px auto;
   }
 `;
 
@@ -245,6 +251,13 @@ const Users = styled.div`
   border-radius: 8px;
   background-color: rgba(231, 231, 231, 1);
   width: 563px;
+  @media (max-width: 800px) {
+    width: 350px;
+    position: absolute;
+    top: 80px;
+    left: calc(1vh - 160px);
+    margin: 15px auto;
+  }
 `
 
 const User = styled.div`
