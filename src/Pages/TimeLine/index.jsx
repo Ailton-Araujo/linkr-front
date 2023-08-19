@@ -2,9 +2,9 @@ import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AuthContext from "../../contexts/AuthContext";
-
 import CreateLinkr from "./CreateLinkr";
-import Linkr from "./LInkr";
+import Linkr from "../../components/LInkr";
+import Trending from "../../components/Trending";
 import { getTimeLine } from "../../services/Api";
 
 export default function TimeLine() {
@@ -15,11 +15,7 @@ export default function TimeLine() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!auth || !auth?.token) {
-      navigate("/");
-    }
     setTryGetList(true);
-
     function success(data) {
       if (data.length === 0) setMessage("There are no posts yet");
       setPostList(data);
@@ -32,7 +28,7 @@ export default function TimeLine() {
       setTryGetList(false);
     }
     getTimeLine(auth?.token, success, failure);
-  }, [auth]);
+  }, []);
 
   return (
     <TimeLineStyled>

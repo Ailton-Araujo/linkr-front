@@ -4,10 +4,10 @@ import styled from "styled-components";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FaPencilAlt } from "react-icons/fa";
 import { Tooltip } from "react-tooltip";
-import AuthContext from "../../contexts/AuthContext";
-import useUserInfo from "../../hooks/useUserInfo";
-import HashTagsCard from "../../components/HashtagsCard";
-import { postLike, editPost } from "../../services/Api";
+import AuthContext from "../contexts/AuthContext";
+import useUserInfo from "../hooks/useUserInfo";
+import HashTagsCard from "./HashtagsCard";
+import { postLike, editPost } from "../services/Api";
 
 export default function Linkr({ dataPost }) {
   const { post, meta } = dataPost;

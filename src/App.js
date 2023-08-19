@@ -3,6 +3,7 @@ import GlobalStyles from "./Global/GlobalStyles";
 import ResetStyles from "./Global/ResetStyles";
 import { SignUp, Login, TimeLine, UserPage, HashtagPage } from "./Pages";
 import TopMenu from "./components/TopMenu";
+import { SignOutOutlet, SignInOutlet } from "./components/Outlets";
 import { AuthProvider } from "./contexts/AuthContext";
 import { UserInfoProvider } from "./contexts/UserInfoContext";
 
@@ -16,11 +17,17 @@ function App() {
         <UserInfoProvider>
           {pathname !== "/" && pathname !== "/sign-up" && <TopMenu />}
           <Routes>
-            <Route path="/" element={<Login />}></Route>
+            <Route element={<SignInOutlet />}>
+              <Route path="/" element={<Login />}></Route>
+            </Route>
+
             <Route path="/sign-up" element={<SignUp />}></Route>
-            <Route path="/timeline" element={<TimeLine />}></Route>
-            <Route path="/hashtag/:hashtag" element={<HashtagPage />}></Route>
-            <Route path="/user/:id" element={<UserPage />} />
+
+            <Route element={<SignOutOutlet />}>
+              <Route path="/timeline" element={<TimeLine />}></Route>
+              <Route path="/hashtag/:hashtag" element={<HashtagPage />}></Route>
+              <Route path="/user/:id" element={<UserPage />} />
+            </Route>
           </Routes>
         </UserInfoProvider>
       </AuthProvider>

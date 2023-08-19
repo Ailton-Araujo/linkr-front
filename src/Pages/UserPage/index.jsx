@@ -1,7 +1,7 @@
 import { useEffect, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
-import Linkr from "../TimeLine/LInkr";
+import Linkr from "../../components/LInkr";
 import { getUserPosts, getUsername } from "../../services/Api";
 import { TimeLineStyled } from "../TimeLine";
 
@@ -16,9 +16,6 @@ export default function UserPage() {
   const { id } = useParams();
 
   useEffect(() => {
-    if (!auth || !auth.token) {
-      navigate("/");
-    }
     setTryGetList(true);
     setLoadingName(true);
     getUsername(id, auth.token, successUsername, failure);
@@ -42,7 +39,7 @@ export default function UserPage() {
       setLoadingName(false);
     }
     getUserPosts(id, auth.token, success, failureUsername);
-  }, [auth]);
+  }, []);
 
   return (
     <TimeLineStyled>

@@ -2,14 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
-import Linkr from "../TimeLine/LInkr";
+import Linkr from "../../components/LInkr";
 import Trending from "../../components/Trending";
 
 export default function HashtagPage() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const { token } = JSON.parse(localStorage.getItem("auth"));
   const { hashtag } = useParams();
-
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
