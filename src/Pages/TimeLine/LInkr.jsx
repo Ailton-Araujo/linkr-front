@@ -105,8 +105,8 @@ export default function Linkr({ dataPost }) {
       </section>
       <div>
         <form onSubmit={(e) => handleSubmit(e, post.id)}>
-          <h3 data-test="username">
-            <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
+          <PostHeader>
+            <h3 data-test="username"><Link to={`/user/${post.user.id}`}>{post.user.username}</Link></h3>
             {post.user.id === userInfo.id ? (
               <button
                 type="button"
@@ -118,21 +118,20 @@ export default function Linkr({ dataPost }) {
             ) : (
               ""
             )}
-          </h3>
-          <h4 data-test="description">
+          </PostHeader>
             {!editor ? (
-              <HashTagsCard>{original}</HashTagsCard>
+              <h4 data-test="description"><HashTagsCard>{original}</HashTagsCard></h4>
             ) : (
-              <input
+              <EditInput
                 type="text"
                 value={text}
                 onChange={handleChange}
                 ref={inputReference}
                 onKeyDown={handleKeyDown}
                 disabled={loading}
+                data-test="edit-input"
               />
             )}
-          </h4>
         </form>
 
         <div data-test="link" onClick={handleLink}>
@@ -147,6 +146,24 @@ export default function Linkr({ dataPost }) {
     </PostStyled>
   );
 }
+
+
+const PostHeader = styled.header`
+  display: flex;
+  justify-content: space-between;
+  border: none;
+`
+
+const EditInput = styled.input`
+  color: #b7b7b7;
+  font-family: "Lato", sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  background-color: inherit;
+  border: none;
+  width: 100%;
+  padding: 8px 0px;
+`
 
 const PostStyled = styled.article`
   width: 620px;
@@ -163,6 +180,10 @@ const PostStyled = styled.article`
   a:-webkit-any-link {
     text-decoration: none;
     color: inherit;
+  }
+
+  input:focus {
+    outline: none;
   }
 
   section {
@@ -212,8 +233,6 @@ const PostStyled = styled.article`
       font-size: 19px;
       line-height: 25px;
       font-weight: 400;
-      display: flex;
-      justify-content: space-between;
     }
     h4 {
       padding: 10px 0px;
@@ -221,19 +240,6 @@ const PostStyled = styled.article`
       font-family: "Lato", sans-serif;
       font-size: 17px;
       font-weight: 400;
-      input {
-        padding: 0;
-        color: #b7b7b7;
-        font-family: "Lato", sans-serif;
-        font-size: 17px;
-        font-weight: 400;
-        background-color: inherit;
-        border: none;
-        width: 100%;
-      }
-      input:focus {
-        outline: none;
-      }
     }
     div {
       width: 100%;
