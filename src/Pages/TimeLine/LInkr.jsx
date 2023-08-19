@@ -188,8 +188,9 @@ const PostStyled = styled.article`
         cursor: not-allowed;
       }
     }
+  }
 
-  .icon{
+  .icon {
     color: white;
     width: 23px;
   }
@@ -230,7 +231,7 @@ const PostStyled = styled.article`
         border: none;
         width: 100%;
       }
-      input:focus{
+      input:focus {
         outline: none;
       }
     }
