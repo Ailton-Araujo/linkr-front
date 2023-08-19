@@ -59,7 +59,7 @@ const TopMenu = () => {
           linkr
         </h1>
         <SearchBox>
-          <SearchBar>
+          <SearchBar border={usersSearch.length > 0 ? true : false}>
             <DebounceInput
               type="text"
               placeholder="Search for people"
@@ -206,19 +206,21 @@ const UserOptions = styled.button`
 `;
 
 const SearchBar = styled.div`
-  width: 38vh;
+  width: 100%;
   height: 45px;
   background-color: white;
   display: flex;
   align-items: center;
-  border-radius: 8px;
+  ${({ border }) => {
+    return border ? `border-radius: 8px 8px 0px 0px;` : ` border-radius:8px;`;
+  }};
   padding: 0 10px;
   z-index: 5;
   input {
+    width: 100%;
+    height: 45px;
     border: none;
     vertical-align: middle;
-    width: 35vh;
-    height: 45px;
     font-family: "Lato", sans-serif;
     font-size: 19px;
     line-height: 23px;
@@ -233,32 +235,29 @@ const SearchBar = styled.div`
     fill: rgba(198, 198, 198, 1);
     font-size: 30px;
   }
-  @media (max-width: 600px) {
-    width: 350px;
-    input {
-      width: 320px;
-    }
-    position: absolute;
-    top: 40px;
-    left: calc(1vh - 160px);
-    margin: auto;
-  }
 `;
 
 const SearchBox = styled.div`
   position: relative;
+  width: 40%;
   a:-webkit-any-link {
     text-decoration: none;
     color: inherit;
   }
+  @media (max-width: 600px) {
+    width: 90%;
+    position: absolute;
+    top: 80px;
+    left: 5%;
+  }
 `;
 
 const Users = styled.div`
+  width: 100%;
   position: absolute;
   z-index: 5;
-  border-radius: 8px;
+  border-radius: 0px 0px 8px 8px;
   background-color: rgba(231, 231, 231, 1);
-  width: 563px;
 `;
 
 const User = styled.div`

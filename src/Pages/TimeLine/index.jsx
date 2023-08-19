@@ -2,9 +2,9 @@ import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AuthContext from "../../contexts/AuthContext";
-
 import CreateLinkr from "./CreateLinkr";
-import Linkr from "./LInkr";
+import Linkr from "../../components/LInkr";
+import Trending from "../../components/Trending";
 import { getTimeLine } from "../../services/Api";
 
 export default function TimeLine() {
