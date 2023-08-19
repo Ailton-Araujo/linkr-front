@@ -74,7 +74,7 @@ const Login = () => {
             action={"Login In..."}
             purpose={"Log In"}
           ></LoginSignUpButton>
-          <p data-test="sign-up-link" onClick={() => navigate("/signup")}>
+          <p data-test="sign-up-link" onClick={() => navigate("/sign-up")}>
             First time? Create an account!
           </p>
         </Form>
