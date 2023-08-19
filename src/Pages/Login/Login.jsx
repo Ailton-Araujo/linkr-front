@@ -51,7 +51,7 @@ const Login = () => {
       <FormContainer>
         <Form onSubmit={handleSubmit}>
           <LoginSignUpInput
-            datatest={"email"}
+            test={"email"}
             setBody={setBody}
             body={body}
             placeholder={"e-mail"}
@@ -60,7 +60,7 @@ const Login = () => {
             type={"email"}
           ></LoginSignUpInput>
           <LoginSignUpInput
-            datatest={"password"}
+            test={"password"}
             setBody={setBody}
             body={body}
             placeholder={"password"}
@@ -69,7 +69,7 @@ const Login = () => {
             type={"password"}
           ></LoginSignUpInput>
           <LoginSignUpButton
-            datatest={"login-btn"}
+            test={"login-btn"}
             disable={disable}
             action={"Login In..."}
             purpose={"Log In"}

@@ -52,7 +52,7 @@ const SignUp = () => {
       <FormContainer>
         <Form onSubmit={handleSubmit}>
           <LoginSignUpInput
-            datatest={"email"}
+            test={"email"}
             setBody={setBody}
             body={body}
             placeholder={"e-mail"}
@@ -61,7 +61,7 @@ const SignUp = () => {
             type={"email"}
           ></LoginSignUpInput>
           <LoginSignUpInput
-            datatest={"password"}
+            test={"password"}
             setBody={setBody}
             body={body}
             placeholder={"password"}
@@ -70,7 +70,7 @@ const SignUp = () => {
             type={"password"}
           ></LoginSignUpInput>
           <LoginSignUpInput
-            datatest={"username"}
+            test={"username"}
             setBody={setBody}
             body={body}
             placeholder={"username"}
@@ -79,7 +79,7 @@ const SignUp = () => {
             type={"text"}
           ></LoginSignUpInput>
           <LoginSignUpInput
-            datatest={"picture-url"}
+            test={"picture-url"}
             setBody={setBody}
             body={body}
             placeholder={"picture Url"}
@@ -88,12 +88,14 @@ const SignUp = () => {
             type={"url"}
           ></LoginSignUpInput>
           <LoginSignUpButton
-            datatest={"sign-up-btn"}
+            test={"sign-up-btn"}
             disable={disable}
             action={action}
             purpose={"Sign Up"}
           ></LoginSignUpButton>
-          <p data-test="login-link" onClick={() => navigate("/")}>Switch back to log in</p>
+          <p data-test="login-link" onClick={() => navigate("/")}>
+            Switch back to log in
+          </p>
         </Form>
       </FormContainer>
     </Wrapper>

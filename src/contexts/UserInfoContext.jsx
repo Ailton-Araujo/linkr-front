@@ -20,7 +20,7 @@ export function UserInfoProvider({ children }) {
     function success(data) {
       setUserInfo({ ...data });
     }
-    getUser(token, success);
+    if (token) getUser(token, success);
   }, [auth]);
 
   return (
