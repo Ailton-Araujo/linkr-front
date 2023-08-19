@@ -51,6 +51,7 @@ const Login = () => {
       <FormContainer>
         <Form onSubmit={handleSubmit}>
           <LoginSignUpInput
+            datatest={"email"}
             setBody={setBody}
             body={body}
             placeholder={"e-mail"}
@@ -59,6 +60,7 @@ const Login = () => {
             type={"email"}
           ></LoginSignUpInput>
           <LoginSignUpInput
+            datatest={"password"}
             setBody={setBody}
             body={body}
             placeholder={"password"}
@@ -67,11 +69,12 @@ const Login = () => {
             type={"password"}
           ></LoginSignUpInput>
           <LoginSignUpButton
+            datatest={"login-btn"}
             disable={disable}
             action={"Login In..."}
             purpose={"Log In"}
           ></LoginSignUpButton>
-          <p onClick={() => navigate("/signup")}>
+          <p data-test="sign-up-link" onClick={() => navigate("/signup")}>
             First time? Create an account!
           </p>
         </Form>

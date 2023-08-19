@@ -9,14 +9,14 @@ import { Link, useNavigate } from "react-router-dom";
 
 const TopMenu = () => {
   const { userInfo } = useUserInfo();
-  const { auth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const ref = useRef(null);
 
   const [dropDown, setDropDown] = useState("up");
   const [search, setSearch] = useState("");
   const [usersSearch, setUsersSearch] = useState([]);
 
-  const navigate = useNavigate("/");
+  const navigate = useNavigate();
 
   const dropMenu = (dropDown) => {
     if(dropDown === "up"){
@@ -52,12 +52,8 @@ const TopMenu = () => {
       setSearch(e.target.value);
     }
     else
-    {
       setUsersSearch([]);
-      setSearch("")
-    }
   }
-
   return (
     <>
       <Navbar>
@@ -73,15 +69,14 @@ const TopMenu = () => {
               debounceTimeout={300}
               onChange={handleChange}
               ref={ref}
-              data-test="search"
-              />
+            />
             <IoIosSearch className="icon"/>
           </SearchBar>
           <Users>
-            { usersSearch.length > 0 && search ? 
+            { usersSearch.length > 0 ? 
             usersSearch.map(user => 
-              <Link to={`/user/${user.id}`} key={user.id}>
-                <User data-test="user-search">
+              <Link to={`/user/${user.id}`}>
+                <User key={user.id}>
                     <img src={user.image} alt={`user ${user.username} image`}/>
                     <p>{user.username}</p>
                 </User>
@@ -93,11 +88,11 @@ const TopMenu = () => {
           <div>
             <IoIosArrowDown className="icon"></IoIosArrowDown>
           </div>
-          <img src={userInfo.image} alt={userInfo.image} />
+          <img data-test="avatar" src={userInfo.image} alt={"Profile-Picture"} />
         </UserOptions>
       </Navbar>
-      <Logout dropdown={dropDown}>
-        <p onClick={logout}>logout</p>
+      <Logout data-test="menu" dropdown={dropDown}>
+        <p data-test="logout" onClick={logout}>logout</p>
       </Logout>
     </>
   );
@@ -197,7 +192,7 @@ const UserOptions = styled.button`
 `;
 
 const SearchBar = styled.div`
-    width: 563px;
+    width: 38vh;
     height: 45px;
     background-color: white;
     display: flex;
@@ -205,11 +200,10 @@ const SearchBar = styled.div`
     border-radius: 8px;
     padding: 0 10px;
     z-index: 5;
-
     input {
       border: none;
       vertical-align: middle;
-      width: 550px;
+      width: 35vh;
       height: 45px;
       font-family: "Lato", sans-serif;
       font-size: 19px;
@@ -225,7 +219,7 @@ const SearchBar = styled.div`
     fill: rgba(198, 198, 198, 1);
     font-size: 30px;
   }
-  @media (max-width: 800px) {
+  @media (max-width: 600px) {
     width: 350px;
     input {
       width: 320px;
@@ -233,7 +227,7 @@ const SearchBar = styled.div`
     position: absolute;
     top: 40px;
     left: calc(1vh - 160px);
-    margin: 15px auto;
+    margin: auto;
   }
 `;
 
@@ -251,13 +245,6 @@ const Users = styled.div`
   border-radius: 8px;
   background-color: rgba(231, 231, 231, 1);
   width: 563px;
-  @media (max-width: 800px) {
-    width: 350px;
-    position: absolute;
-    top: 80px;
-    left: calc(1vh - 160px);
-    margin: 15px auto;
-  }
 `
 
 const User = styled.div`
