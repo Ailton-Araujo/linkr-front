@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FaPencilAlt } from "react-icons/fa";
+import { Tooltip } from "react-tooltip";
 import AuthContext from "../../contexts/AuthContext";
 import useUserInfo from "../../hooks/useUserInfo";
 import HashTagsCard from "../../components/HashtagsCard";
@@ -10,10 +11,14 @@ import { postLike, editPost } from "../../services/Api";
 
 export default function Linkr({ dataPost }) {
   const { post, meta } = dataPost;
+  if (!post.postLikes[0]) post.postLikes.length = 0;
   const { auth } = useContext(AuthContext);
   const { userInfo } = useUserInfo();
   const [tryLike, setTryLike] = useState(false);
-  const [userLiked, setUserLiked] = useState(false);
+  const [userLiked, setUserLiked] = useState(
+    post.postLikes.includes(userInfo.username)
+  );
+  const [message, setMessage] = useState("");
   const [editor, setEditor] = useState(false);
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState(post.description);
@@ -22,7 +27,49 @@ export default function Linkr({ dataPost }) {
 
   useEffect(() => {
     if (editor) inputReference.current.focus();
-  }, [editor]);
+
+    switch (post.postLikes.length) {
+      case 0:
+        setMessage("Seja o primeiro a curtir esse Post");
+        break;
+      case 1:
+        if (userLiked) return setMessage("Você");
+        setMessage(post.postLikes[0]);
+        break;
+      case 2:
+        if (userLiked)
+          return setMessage(
+            `Você, ${post.postLikes.find((e) => e !== userInfo.username)}`
+          );
+        setMessage(`${post.postLikes[0]}, ${post.postLikes[1]}`);
+      case 3:
+        if (userLiked)
+          return setMessage(
+            `Você, ${post.postLikes.find(
+              (e) => e !== userInfo.username
+            )} e outra ${post.postLikes.length - 2} pessoa`
+          );
+        setMessage(
+          `${post.postLikes[0]}, ${post.postLikes[1]} e outra ${
+            post.postLikes.length - 2
+          } pessoa`
+        );
+        break;
+      default:
+        if (userLiked)
+          return setMessage(
+            `Você, ${post.postLikes.find(
+              (e) => e !== userInfo.username
+            )} e outras ${post.postLikes.length - 2} pessoas`
+          );
+        setMessage(
+          `${post.postLikes[0]}, ${post.postLikes[1]} e outras ${
+            post.postLikes.length - 2
+          } pessoas`
+        );
+        break;
+    }
+  }, [editor, post.postLikes.length]);
 
   function handleLike() {
     setTryLike(true);
@@ -36,6 +83,9 @@ export default function Linkr({ dataPost }) {
 
     function success(data) {
       setUserLiked(data);
+      data
+        ? post.postLikes.push(userInfo.username)
+        : post.postLikes.splice(post.postLikes.indexOf(userInfo.username), 1);
       setTryLike(false);
     }
     function failure(error) {
@@ -103,12 +153,14 @@ export default function Linkr({ dataPost }) {
         <div></div>
         <button
           data-test="like-btn"
+          data-tooltip-id={post.id}
           disabled={tryLike}
           onClick={handleLike}
           type="button"
         >
           {userLiked ? <Liked /> : <NotLiked />}
         </button>
+        <p data-test="counter">{post.postLikes.length} likes</p>
       </section>
       <div>
         <form onSubmit={(e) => handleSubmit(e, post.id)}>
@@ -150,6 +202,14 @@ export default function Linkr({ dataPost }) {
           <div></div>
         </div>
       </div>
+
+      <Tooltip
+        data-test="tooltip"
+        id={post.id}
+        content={message}
+        place="bottom"
+        className="styleToolTip"
+      />
     </PostStyled>
   );
 }
@@ -195,6 +255,8 @@ const PostStyled = styled.article`
 
   section {
     position: relative;
+    font-family: "Lato", sans-serif;
+
     div {
       width: 50px;
       height: 50px;
@@ -216,8 +278,22 @@ const PostStyled = styled.article`
         cursor: not-allowed;
       }
     }
+    p {
+      margin-top: 43px;
+      color: #fff;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 400;
+    }
   }
 
+  .styleToolTip {
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #505050;
+    font-size: 11px;
+    font-weight: 700;
+  }
   .icon {
     color: white;
     width: 23px;
@@ -234,20 +310,33 @@ const PostStyled = styled.article`
 
   div:nth-child(2) {
     width: calc(100% - 50px);
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
     h3 {
       color: #fff;
-      font-family: "Lato", sans-serif;
       font-size: 19px;
       line-height: 25px;
-      font-weight: 400;
+      display: flex;
+      justify-content: space-between;
     }
+    
     h4 {
       padding: 10px 0px;
       color: #b7b7b7;
-      font-family: "Lato", sans-serif;
       font-size: 17px;
-      font-weight: 400;
+      input {
+        padding: 0;
+        color: #b7b7b7;
+        font-size: 17px;
+        background-color: inherit;
+        border: none;
+        width: 100%;
+      }
+      input:focus {
+        outline: none;
+      }
     }
+    
     div {
       width: 100%;
       border-radius: 11px;
@@ -256,12 +345,11 @@ const PostStyled = styled.article`
       display: flex;
       justify-content: space-between;
       align-items: center;
+      cursor: pointer;
       section {
         width: calc(100% - 31%);
         height: 100%;
         padding: 15px;
-        font-family: "Lato", sans-serif;
-        font-weight: 400;
         cursor: pointer;
         h3 {
           color: #cecece;
@@ -276,6 +364,7 @@ const PostStyled = styled.article`
           font-size: 11px;
         }
       }
+    
       div {
         width: 31%;
         height: 150px;
