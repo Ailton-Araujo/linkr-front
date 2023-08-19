@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Trending() {
-  const apiUrl = process.env.REACT_APP_API_URI;
+  const apiUrl = process.env.REACT_APP_API_URL;
   const { token } = JSON.parse(localStorage.getItem("auth"));
 
   const [trending, setTrending] = useState([]);
