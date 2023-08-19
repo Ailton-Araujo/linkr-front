@@ -27,9 +27,9 @@ const SignUp = () => {
       return alert("Todos os campos são obrigatórios!");
     }
     setDisabled(true);
-    const promise = axios.post(`${process.env.REACT_APP_API_URL}/signup`, body);
-    promise
-      .then((res) => {
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/signup`, body)
+      .then(() => {
         setDisabled(false);
         navigate("/");
       })
