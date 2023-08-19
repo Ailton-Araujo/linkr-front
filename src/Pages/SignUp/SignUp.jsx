@@ -18,20 +18,22 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setDisabled(true);
     if (
       body.email === "" ||
       body.password === "" ||
       body.username === "" ||
       body.pictureUrl === ""
     ) {
+      setDisabled(false);
       return alert("Todos os campos são obrigatórios!");
     }
-    setDisabled(true);
+
     axios
       .post(`${process.env.REACT_APP_API_URL}/signup`, body)
       .then(() => {
-        setDisabled(false);
         navigate("/");
+        setDisabled(false);
       })
       .catch((err) => {
         if (err.response.status === 409) {
