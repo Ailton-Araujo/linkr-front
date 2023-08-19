@@ -7,7 +7,7 @@ import TopMenu from "../components/TopMenu/TopMenu";
 import Trending from "../components/Trending";
 
 export default function HashtagPage() {
-  const apiUrl = process.env.REACT_APP_API_URI;
+  const apiUrl = process.env.REACT_APP_API_URL;
   const { token } = JSON.parse(localStorage.getItem("auth"));
   const { hashtag } = useParams();
 
