@@ -78,4 +78,3 @@ export const TimeLineStyled = styled.main`
     margin-top: 60px;
   }
 `;
-
