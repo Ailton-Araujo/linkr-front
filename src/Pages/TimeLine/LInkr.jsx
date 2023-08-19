@@ -87,7 +87,14 @@ export default function Linkr({ dataPost }) {
   function handleSubmit(e, id) {
     e.preventDefault();
     setLoading(true);
-    editPost(id, { description: text }, auth.token, success, failure);
+    editPost(id, 
+      { 
+        description: text,
+        hashtags: text
+          .split(/([#|＃][^\s]+)/g)
+          .filter((e) => e.match(/([#|＃][^\s]+)/g))
+          .map((e) => e.replace("#", ""))
+      }, auth.token, success, failure);
   }
 
   return (
