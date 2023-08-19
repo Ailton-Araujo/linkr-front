@@ -31,6 +31,7 @@ export default function CreateLinkr({ token, setPostList }) {
     function success(data) {
       refLink.current.value = "";
       refText.current.value = "";
+      console.log(data);
       setPostList((prevState) => [data, ...prevState]);
       setTryPublish(false);
     }
@@ -38,6 +39,7 @@ export default function CreateLinkr({ token, setPostList }) {
     function failure(error) {
       refLink.current.value = "";
       refText.current.value = "";
+      console.log(error);
       if (error.response) {
         alert(error.response.data);
       } else {
