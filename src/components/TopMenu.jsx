@@ -1,10 +1,10 @@
 import { useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import { IoIosArrowDown, IoIosSearch } from "react-icons/io";
-import useUserInfo from "../../hooks/useUserInfo";
+import useUserInfo from "../hooks/useUserInfo";
 import { DebounceInput } from "react-debounce-input";
-import { queryUsers } from "../../services/Api";
-import AuthContext from "../../contexts/AuthContext";
+import { queryUsers } from "../services/Api";
+import AuthContext from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
 const TopMenu = () => {
@@ -53,7 +53,7 @@ const TopMenu = () => {
     } else setUsersSearch([]);
   }
   return (
-    <>
+    <header>
       <Navbar>
         <h1 onClick={() => navigate("/timeline")} style={{ cursor: "pointer" }}>
           linkr
@@ -77,10 +77,7 @@ const TopMenu = () => {
               ? usersSearch.map((user) => (
                   <Link to={`/user/${user.id}`}>
                     <User key={user.id}>
-                      <img
-                        src={user.image}
-                        alt={`user ${user.username} image`}
-                      />
+                      <img src={user.image} alt={user.username} />
                       <p>{user.username}</p>
                     </User>
                   </Link>
@@ -101,7 +98,7 @@ const TopMenu = () => {
           <img
             data-test="avatar"
             src={userInfo.image}
-            alt={"Profile-Picture"}
+            alt={userInfo.username}
           />
         </UserOptions>
       </Navbar>
@@ -110,7 +107,7 @@ const TopMenu = () => {
           logout
         </p>
       </Logout>
-    </>
+    </header>
   );
 };
 

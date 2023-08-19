@@ -2,7 +2,7 @@ import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AuthContext from "../../contexts/AuthContext";
-import TopMenu from "../../components/TopMenu/TopMenu";
+
 import CreateLinkr from "./CreateLinkr";
 import Linkr from "./LInkr";
 import { getTimeLine } from "../../services/Api";
@@ -35,20 +35,17 @@ export default function TimeLine() {
   }, [auth]);
 
   return (
-    <>
-      <TopMenu />
-      <TimeLineStyled>
-        <h1>timeline</h1>
-        <CreateLinkr token={auth?.token} setPostList={setPostList} />
-        {tryGetList ? (
-          <h2 data-test="message">Loading</h2>
-        ) : postList.length === 0 ? (
-          <h2 data-test="message">{message}</h2>
-        ) : (
-          postList.map((post) => <Linkr key={post.post.id} dataPost={post} />)
-        )}
-      </TimeLineStyled>
-    </>
+    <TimeLineStyled>
+      <h1>timeline</h1>
+      <CreateLinkr token={auth?.token} setPostList={setPostList} />
+      {tryGetList ? (
+        <h2 data-test="message">Loading</h2>
+      ) : postList.length === 0 ? (
+        <h2 data-test="message">{message}</h2>
+      ) : (
+        postList.map((post) => <Linkr key={post.post.id} dataPost={post} />)
+      )}
+    </TimeLineStyled>
   );
 }
 

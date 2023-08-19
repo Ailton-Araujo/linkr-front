@@ -2,9 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
-import Linkr from "./TimeLine/LInkr";
-import TopMenu from "../components/TopMenu/TopMenu";
-import Trending from "../components/Trending";
+import Linkr from "../TimeLine/LInkr";
+import Trending from "../../components/Trending";
 
 export default function HashtagPage() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -34,28 +33,25 @@ export default function HashtagPage() {
   }, [hashtag]);
 
   return (
-    <>
-      <TopMenu />
-      <SCContainer>
-        <SCTitle data-test="hashtag-title"># {hashtag}</SCTitle>
-        <div>
-          <SCContent>
-            {loading ? (
-              <SCLoading>Loading...</SCLoading>
-            ) : (
-              posts.map((post) => <Linkr key={post.post.id} dataPost={post} />)
-            )}
+    <SCContainer>
+      <SCTitle data-test="hashtag-title"># {hashtag}</SCTitle>
+      <div>
+        <SCContent>
+          {loading ? (
+            <SCLoading>Loading...</SCLoading>
+          ) : (
+            posts.map((post) => <Linkr key={post.post.id} dataPost={post} />)
+          )}
 
-            {error && (
-              <SCErrorMessage>
-                There was an error loading the posts!
-              </SCErrorMessage>
-            )}
-          </SCContent>
-          <Trending />
-        </div>
-      </SCContainer>
-    </>
+          {error && (
+            <SCErrorMessage>
+              There was an error loading the posts!
+            </SCErrorMessage>
+          )}
+        </SCContent>
+        <Trending />
+      </div>
+    </SCContainer>
   );
 }
 

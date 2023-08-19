@@ -1,9 +1,8 @@
 import { useEffect, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
-import TopMenu from "../../components/TopMenu/TopMenu";
 import Linkr from "../TimeLine/LInkr";
-import { getUserPosts, getUsername} from "../../services/Api";
+import { getUserPosts, getUsername } from "../../services/Api";
 import { TimeLineStyled } from "../TimeLine";
 
 export default function UserPage() {
@@ -34,11 +33,11 @@ export default function UserPage() {
       );
       setTryGetList(false);
     }
-    function successUsername(data){
+    function successUsername(data) {
       setUsername(data);
       setLoadingName(false);
     }
-    function failureUsername(data){
+    function failureUsername(data) {
       setUsername("");
       setLoadingName(false);
     }
@@ -46,19 +45,15 @@ export default function UserPage() {
   }, [auth]);
 
   return (
-    <>
-      <TopMenu />
-      <TimeLineStyled>
-        <h1>{loadingName ? "" : `${username}'s posts`}</h1>
-        {tryGetList ? (
-          <h2>Loading</h2>
-        ) : postList.length === 0 ? (
-          <h2>{message}</h2>
-        ) : (
-          postList.map((post) => <Linkr key={post.post.id} dataPost={post} />)
-        )}
-      </TimeLineStyled>
-    </>
+    <TimeLineStyled>
+      <h1>{loadingName ? "" : `${username}'s posts`}</h1>
+      {tryGetList ? (
+        <h2>Loading</h2>
+      ) : postList.length === 0 ? (
+        <h2>{message}</h2>
+      ) : (
+        postList.map((post) => <Linkr key={post.post.id} dataPost={post} />)
+      )}
+    </TimeLineStyled>
   );
 }
-

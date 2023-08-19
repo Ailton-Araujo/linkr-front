@@ -137,14 +137,19 @@ export default function Linkr({ dataPost }) {
   function handleSubmit(e, id) {
     e.preventDefault();
     setLoading(true);
-    editPost(id, 
-      { 
+    editPost(
+      id,
+      {
         description: text,
         hashtags: text
           .split(/([#|＃][^\s]+)/g)
           .filter((e) => e.match(/([#|＃][^\s]+)/g))
-          .map((e) => e.replace("#", ""))
-      }, auth.token, success, failure);
+          .map((e) => e.replace("#", "")),
+      },
+      auth.token,
+      success,
+      failure
+    );
   }
 
   return (
@@ -165,7 +170,9 @@ export default function Linkr({ dataPost }) {
       <div>
         <form onSubmit={(e) => handleSubmit(e, post.id)}>
           <PostHeader>
-            <h3 data-test="username"><Link to={`/user/${post.user.id}`}>{post.user.username}</Link></h3>
+            <h3 data-test="username">
+              <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
+            </h3>
             {post.user.id === userInfo.id ? (
               <button
                 type="button"
@@ -178,19 +185,21 @@ export default function Linkr({ dataPost }) {
               ""
             )}
           </PostHeader>
-            {!editor ? (
-              <h4 data-test="description"><HashTagsCard>{original}</HashTagsCard></h4>
-            ) : (
-              <EditInput
-                type="text"
-                value={text}
-                onChange={handleChange}
-                ref={inputReference}
-                onKeyDown={handleKeyDown}
-                disabled={loading}
-                data-test="edit-input"
-              />
-            )}
+          {!editor ? (
+            <h4 data-test="description">
+              <HashTagsCard>{original}</HashTagsCard>
+            </h4>
+          ) : (
+            <EditInput
+              type="text"
+              value={text}
+              onChange={handleChange}
+              ref={inputReference}
+              onKeyDown={handleKeyDown}
+              disabled={loading}
+              data-test="edit-input"
+            />
+          )}
         </form>
 
         <div data-test="link" onClick={handleLink}>
@@ -214,12 +223,11 @@ export default function Linkr({ dataPost }) {
   );
 }
 
-
 const PostHeader = styled.header`
   display: flex;
   justify-content: space-between;
   border: none;
-`
+`;
 
 const EditInput = styled.input`
   color: #b7b7b7;
@@ -230,7 +238,7 @@ const EditInput = styled.input`
   border: none;
   width: 100%;
   padding: 8px 0px;
-`
+`;
 
 const PostStyled = styled.article`
   width: 620px;
@@ -319,7 +327,7 @@ const PostStyled = styled.article`
       display: flex;
       justify-content: space-between;
     }
-    
+
     h4 {
       padding: 10px 0px;
       color: #b7b7b7;
@@ -336,7 +344,7 @@ const PostStyled = styled.article`
         outline: none;
       }
     }
-    
+
     div {
       width: 100%;
       border-radius: 11px;
@@ -364,7 +372,7 @@ const PostStyled = styled.article`
           font-size: 11px;
         }
       }
-    
+
       div {
         width: 31%;
         height: 150px;
