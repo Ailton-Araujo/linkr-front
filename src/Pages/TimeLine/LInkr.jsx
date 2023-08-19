@@ -2,14 +2,14 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { FaPencilAlt } from "react-icons/fa"
+import { FaPencilAlt } from "react-icons/fa";
 import AuthContext from "../../contexts/AuthContext";
 import useUserInfo from "../../hooks/useUserInfo";
 import HashTagsCard from "../../components/HashtagsCard";
-import { postLike,editPost } from "../../services/Api";
-
+import { postLike, editPost } from "../../services/Api";
 
 export default function Linkr({ dataPost }) {
+  const { post, meta } = dataPost;
   const { auth } = useContext(AuthContext);
   const { userInfo } = useUserInfo();
   const [tryLike, setTryLike] = useState(false);
@@ -18,15 +18,12 @@ export default function Linkr({ dataPost }) {
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState(post.description);
   const [original, setOriginal] = useState(post.description);
-  const { post, meta } = dataPost;
   const inputReference = useRef(null);
 
   useEffect(() => {
-    if (editor)
-        inputReference.current.focus();
+    if (editor) inputReference.current.focus();
   }, [editor]);
-  
-  
+
   function handleLike() {
     setTryLike(true);
     const newLike = {
@@ -51,50 +48,49 @@ export default function Linkr({ dataPost }) {
     }
     postLike(newLike, auth.token, success, failure);
   }
-  
+
   function handleLink() {
     window.open(post.link, "_blank").focus();
   }
 
-  function toggleEditMode(){
-    handleCancelChanges()
+  function toggleEditMode() {
+    handleCancelChanges();
     setEditor(!editor);
   }
 
-function handleChange(e){
+  function handleChange(e) {
     setText(e.target.value);
-}
-
-function handleCancelChanges(){
-  setText(original);
-  setEditor(false);
-}
-
-function handleKeyDown(e) {
-  if (e.key === 'Escape'){
-      handleCancelChanges();
   }
-}
 
-function success(data){
-  setOriginal(text);
-  setEditor(false);
-  setLoading(false);
-}
+  function handleCancelChanges() {
+    setText(original);
+    setEditor(false);
+  }
 
-function failure(error){
-  alert("Não foi possível realizar a edição. Tente novamente.")
-  setLoading(false);
-}
+  function handleKeyDown(e) {
+    if (e.key === "Escape") {
+      handleCancelChanges();
+    }
+  }
 
-function handleSubmit(e, id){
+  function success(data) {
+    setOriginal(text);
+    setEditor(false);
+    setLoading(false);
+  }
+
+  function failure(error) {
+    alert("Não foi possível realizar a edição. Tente novamente.");
+    setLoading(false);
+  }
+
+  function handleSubmit(e, id) {
     e.preventDefault();
     setLoading(true);
-    editPost(id, {description: text}, auth.token, success, failure)
-}
+    editPost(id, { description: text }, auth.token, success, failure);
+  }
 
   return (
-
     <PostStyled data-test="post" bg={post.user.image} bgspan={meta.image}>
       <section>
         <div></div>
@@ -108,20 +104,37 @@ function handleSubmit(e, id){
         </button>
       </section>
       <div>
-        <form onSubmit={e => handleSubmit(e, post.id)}>
+        <form onSubmit={(e) => handleSubmit(e, post.id)}>
           <h3 data-test="username">
             <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
-            {post.user.id === userInfo.id ? 
-           <button type="button" data-test="edit-btn" onClick={toggleEditMode}><FaPencilAlt className="icon"/></button> : ""
-            }
+            {post.user.id === userInfo.id ? (
+              <button
+                type="button"
+                data-test="edit-btn"
+                onClick={toggleEditMode}
+              >
+                <FaPencilAlt className="icon" />
+              </button>
+            ) : (
+              ""
+            )}
           </h3>
           <h4 data-test="description">
-              { !editor ? 
-              <HashTagsCard>{original}</HashTagsCard> 
-              : <input type="text" value={text} onChange={handleChange} ref={inputReference} onKeyDown={handleKeyDown} disabled={loading}/> }
+            {!editor ? (
+              <HashTagsCard>{original}</HashTagsCard>
+            ) : (
+              <input
+                type="text"
+                value={text}
+                onChange={handleChange}
+                ref={inputReference}
+                onKeyDown={handleKeyDown}
+                disabled={loading}
+              />
+            )}
           </h4>
         </form>
-        
+
         <div data-test="link" onClick={handleLink}>
           <section>
             <h3>{meta.title}</h3>
