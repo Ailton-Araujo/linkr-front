@@ -43,7 +43,6 @@ export default function CreateLinkr({ token, setPostList }) {
       } else {
         alert(error.message);
       }
-
       setTryPublish(false);
     }
     postLink(newPost, token, success, failure);

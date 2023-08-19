@@ -10,10 +10,10 @@ const Login = () => {
   const navigate = useNavigate();
   const [disable, setDisabled] = useState(false);
   const [body, setBody] = useState({ email: "", password: "" });
-  const { auth, loginAuth, setAuth } = useContext(AuthContext);
+  const { auth, loginAuth } = useContext(AuthContext);
 
   useEffect(() => {
-    if (auth && auth.token) {
+    if (auth && auth?.token) {
       navigate("/timeline");
     }
   }, []);
@@ -28,7 +28,7 @@ const Login = () => {
     promise
       .then((res) => {
         loginAuth(res.data);
-        setAuth(res.data);
+        setDisabled(false);
         navigate("/timeline");
       })
       .catch((err) => {

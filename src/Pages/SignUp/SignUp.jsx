@@ -17,6 +17,7 @@ const SignUp = () => {
   });
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     if (
       body.email === "" ||
       body.password === "" ||
@@ -25,11 +26,11 @@ const SignUp = () => {
     ) {
       return alert("Todos os campos são obrigatórios!");
     }
-    e.preventDefault();
     setDisabled(true);
     const promise = axios.post(`${process.env.REACT_APP_API_URL}/signup`, body);
     promise
       .then((res) => {
+        setDisabled(false);
         navigate("/");
       })
       .catch((err) => {

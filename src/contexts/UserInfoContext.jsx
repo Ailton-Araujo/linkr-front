@@ -9,7 +9,7 @@ export function UserInfoProvider({ children }) {
     image: "loading",
     username: "loading",
   });
-  const { auth } = useContext(AuthContext);
+  const { auth, logoutAuth } = useContext(AuthContext);
 
   function userInfoSignOut() {
     setUserInfo({});
@@ -17,10 +17,20 @@ export function UserInfoProvider({ children }) {
 
   useEffect(() => {
     const token = auth?.token;
+
     function success(data) {
       setUserInfo({ ...data });
     }
-    if (token) getUser(token, success);
+
+    function failure(error) {
+      logoutAuth();
+      if (error.response) {
+        alert(error.response.data);
+      } else {
+        alert(error.message);
+      }
+    }
+    if (token) getUser(token, success, failure);
   }, [auth]);
 
   return (

@@ -10,9 +10,13 @@ export function AuthProvider({ children }) {
     setAuth(auth);
     localStorage.setItem("auth", JSON.stringify(auth));
   }
-  
+  function logoutAuth() {
+    localStorage.removeItem("auth");
+    setAuth("");
+  }
+
   return (
-    <AuthContext.Provider value={{ auth, setAuth, loginAuth }}>
+    <AuthContext.Provider value={{ auth, loginAuth, logoutAuth }}>
       {children}
     </AuthContext.Provider>
   );

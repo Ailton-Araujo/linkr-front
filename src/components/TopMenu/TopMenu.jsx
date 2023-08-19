@@ -2,14 +2,14 @@ import { useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import { IoIosArrowDown, IoIosSearch } from "react-icons/io";
 import useUserInfo from "../../hooks/useUserInfo";
-import { DebounceInput } from 'react-debounce-input';
+import { DebounceInput } from "react-debounce-input";
 import { queryUsers } from "../../services/Api";
 import AuthContext from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
 const TopMenu = () => {
   const { userInfo } = useUserInfo();
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, logoutAuth } = useContext(AuthContext);
   const ref = useRef(null);
 
   const [dropDown, setDropDown] = useState("up");
@@ -19,25 +19,25 @@ const TopMenu = () => {
   const navigate = useNavigate();
 
   const dropMenu = (dropDown) => {
-    if(dropDown === "up"){
+    if (dropDown === "up") {
       setDropDown("down");
     } else {
       setDropDown("up");
-    };
+    }
   };
 
   const onBlurDropMenu = (dropDown) => {
-    if(dropDown === "down"){
+    if (dropDown === "down") {
       setDropDown("up");
     } else {
       return;
     }
   };
 
-  const logout = () => {
-    localStorage.clear();
+  function logout() {
+    logoutAuth();
     navigate("/");
-  };
+  }
 
   function success(data) {
     setUsersSearch(data);
@@ -46,19 +46,19 @@ const TopMenu = () => {
     console.log(error);
   }
 
-  function handleChange(e){
-    if (e.target.value){
-      queryUsers(e.target.value, auth.token, success, failure)
+  function handleChange(e) {
+    if (e.target.value) {
+      queryUsers(e.target.value, auth.token, success, failure);
       setSearch(e.target.value);
-    }
-    else
-      setUsersSearch([]);
+    } else setUsersSearch([]);
   }
   return (
     <>
       <Navbar>
-        <h1>linkr</h1>
-        <SearchBox>          
+        <h1 onClick={() => navigate("/timeline")} style={{ cursor: "pointer" }}>
+          linkr
+        </h1>
+        <SearchBox>
           <SearchBar>
             <DebounceInput
               type="text"
@@ -70,29 +70,45 @@ const TopMenu = () => {
               onChange={handleChange}
               ref={ref}
             />
-            <IoIosSearch className="icon"/>
+            <IoIosSearch className="icon" />
           </SearchBar>
           <Users>
-            { usersSearch.length > 0 ? 
-            usersSearch.map(user => 
-              <Link to={`/user/${user.id}`}>
-                <User key={user.id}>
-                    <img src={user.image} alt={`user ${user.username} image`}/>
-                    <p>{user.username}</p>
-                </User>
-              </Link>)
-            : ""}
+            {usersSearch.length > 0
+              ? usersSearch.map((user) => (
+                  <Link to={`/user/${user.id}`}>
+                    <User key={user.id}>
+                      <img
+                        src={user.image}
+                        alt={`user ${user.username} image`}
+                      />
+                      <p>{user.username}</p>
+                    </User>
+                  </Link>
+                ))
+              : ""}
           </Users>
         </SearchBox>
-        <UserOptions onBlur={() => onBlurDropMenu(dropDown)} dropdown={dropDown} onClick={() => { dropMenu(dropDown) }}>
+        <UserOptions
+          onBlur={() => onBlurDropMenu(dropDown)}
+          dropdown={dropDown}
+          onClick={() => {
+            dropMenu(dropDown);
+          }}
+        >
           <div>
             <IoIosArrowDown className="icon"></IoIosArrowDown>
           </div>
-          <img data-test="avatar" src={userInfo.image} alt={"Profile-Picture"} />
+          <img
+            data-test="avatar"
+            src={userInfo.image}
+            alt={"Profile-Picture"}
+          />
         </UserOptions>
       </Navbar>
       <Logout data-test="menu" dropdown={dropDown}>
-        <p data-test="logout" onClick={logout}>logout</p>
+        <p data-test="logout" onClick={logout}>
+          logout
+        </p>
       </Logout>
     </>
   );
@@ -179,7 +195,8 @@ const UserOptions = styled.button`
     border-radius: 20px;
     background-color: #171717;
     transition: transform 1s;
-    transform: ${(props) => (props.dropdown === "down" ? "rotate(-180deg)" : "")};
+    transform: ${(props) =>
+      props.dropdown === "down" ? "rotate(-180deg)" : ""};
   }
 
   &:hover {
@@ -192,30 +209,30 @@ const UserOptions = styled.button`
 `;
 
 const SearchBar = styled.div`
-    width: 38vh;
+  width: 38vh;
+  height: 45px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  padding: 0 10px;
+  z-index: 5;
+  input {
+    border: none;
+    vertical-align: middle;
+    width: 35vh;
     height: 45px;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    border-radius: 8px;
-    padding: 0 10px;
-    z-index: 5;
-    input {
-      border: none;
-      vertical-align: middle;
-      width: 35vh;
-      height: 45px;
-      font-family: "Lato", sans-serif;
-      font-size: 19px;
-      line-height: 23px;
-    }
-    input::placeholder{
-        color: rgba(198, 198, 198, 1);
-      }
-    input:focus{
-      outline: none;
-    }
-    .icon {
+    font-family: "Lato", sans-serif;
+    font-size: 19px;
+    line-height: 23px;
+  }
+  input::placeholder {
+    color: rgba(198, 198, 198, 1);
+  }
+  input:focus {
+    outline: none;
+  }
+  .icon {
     fill: rgba(198, 198, 198, 1);
     font-size: 30px;
   }
@@ -232,12 +249,12 @@ const SearchBar = styled.div`
 `;
 
 const SearchBox = styled.div`
-    position: relative;
-    a:-webkit-any-link {
-      text-decoration: none;
-      color: inherit;
+  position: relative;
+  a:-webkit-any-link {
+    text-decoration: none;
+    color: inherit;
   }
-`
+`;
 
 const Users = styled.div`
   position: absolute;
@@ -245,7 +262,7 @@ const Users = styled.div`
   border-radius: 8px;
   background-color: rgba(231, 231, 231, 1);
   width: 563px;
-`
+`;
 
 const User = styled.div`
   height: 60px;
@@ -260,6 +277,6 @@ const User = styled.div`
     border-radius: 50%;
     margin: 12px;
   }
-`
+`;
 
 export default TopMenu;

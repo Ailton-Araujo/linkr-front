@@ -15,7 +15,7 @@ function getUser(token, success, failure) {
     .then(({ data }) => {
       success(data);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => failure(error));
 }
 
 function postLink(newPost, token, success, failure) {
@@ -85,8 +85,7 @@ function postLike(newLike, token, success, failure) {
     });
 }
 
-
-function editPost(id, newDesc, token, success, failure){
+function editPost(id, newDesc, token, success, failure) {
   axios
     .patch(`/posts/${id}`, newDesc, tokenProvider(token))
     .then(({ data }) => {
@@ -108,4 +107,3 @@ export {
   editPost,
   postLike,
 };
-
