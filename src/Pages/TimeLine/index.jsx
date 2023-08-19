@@ -15,7 +15,7 @@ export default function TimeLine() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!auth || !auth.token) {
+    if (!auth || !auth?.token) {
       navigate("/");
     }
     setTryGetList(true);
@@ -31,7 +31,7 @@ export default function TimeLine() {
       );
       setTryGetList(false);
     }
-    getTimeLine(auth.token, success, failure);
+    getTimeLine(auth?.token, success, failure);
   }, [auth]);
 
   return (
@@ -39,7 +39,7 @@ export default function TimeLine() {
       <TopMenu />
       <TimeLineStyled>
         <h1>timeline</h1>
-        <CreateLinkr token={auth.token} setPostList={setPostList} />
+        <CreateLinkr token={auth?.token} setPostList={setPostList} />
         {tryGetList ? (
           <h2 data-test="message">Loading</h2>
         ) : postList.length === 0 ? (

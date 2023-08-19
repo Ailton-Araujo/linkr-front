@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-const LoginSignUpButton = ({purpose, disable, action}) => {
+const LoginSignUpButton = ({purpose, disable, action, datatest}) => {
     return (
-        <LogSignButton disabled={disable} type="submit">{disable ? action : purpose}</LogSignButton>
+        <LogSignButton data-test={datatest} disabled={disable} type="submit">{disable ? action : purpose}</LogSignButton>
     );
 };
 

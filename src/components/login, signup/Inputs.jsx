@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-const LoginSignUpInput = ({placeholder, body, setBody, name, value, type}) => {
+const LoginSignUpInput = ({placeholder, body, setBody, name, value, type, datatest}) => {
     const handleChange = (e) => {
         setBody({...body, [e.target.name]: e.target.value});
     };
 
     return (
-        <LogSignInput onChange={handleChange} name={name} value={value} placeholder={placeholder} type={type}></LogSignInput>
+        <LogSignInput data-test={datatest} onChange={handleChange} name={name} value={value} placeholder={placeholder} type={type}></LogSignInput>
     );
 };
 
