@@ -1,5 +1,5 @@
 import axios from "axios";
-axios.defaults.baseURL = `${process.env.REACT_APP_API_URI}`;
+axios.defaults.baseURL = `${process.env.REACT_APP_API_URL}`;
 
 function tokenProvider(auth) {
   return {
@@ -58,10 +58,10 @@ function getUsername(id, token, success, failure) {
     .catch((error) => {
       failure(error);
       console.log(error);
-    });  
+    });
 }
 
-function queryUsers(search, token, success, failure){
+function queryUsers(search, token, success, failure) {
   axios
     .get(`/users?username=${search}`, tokenProvider(token))
     .then(({ data }) => {
@@ -70,8 +70,21 @@ function queryUsers(search, token, success, failure){
     .catch((error) => {
       failure(error);
       console.log(error);
-    });  
+    });
 }
+
+function postLike(newLike, token, success, failure) {
+  axios
+    .post("/likes", newLike, tokenProvider(token))
+    .then(({ data }) => {
+      success(data);
+    })
+    .catch((error) => {
+      console.log(error);
+      failure(error);
+    });
+}
+
 
 function editPost(id, newDesc, token, success, failure){
   axios
@@ -85,4 +98,14 @@ function editPost(id, newDesc, token, success, failure){
     });
 }
 
-export { getUser, postLink, getTimeLine, getUserPosts, getUsername, queryUsers, editPost };
+export {
+  getUser,
+  postLink,
+  getTimeLine,
+  getUserPosts,
+  getUsername,
+  queryUsers,
+  editPost,
+  postLike,
+};
+

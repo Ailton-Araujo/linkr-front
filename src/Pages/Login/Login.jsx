@@ -24,7 +24,7 @@ const Login = () => {
     }
     e.preventDefault();
     setDisabled(true);
-    const promise = axios.post(`${process.env.REACT_APP_API_URI}/login`, body);
+    const promise = axios.post(`${process.env.REACT_APP_API_URL}/login`, body);
     promise
       .then((res) => {
         loginAuth(res.data);

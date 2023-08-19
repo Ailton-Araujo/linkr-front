@@ -3,7 +3,7 @@ import styled from "styled-components";
 import useUserInfo from "../../hooks/useUserInfo";
 import { postLink } from "../../services/Api";
 
-export default function CreateLinkr({ token, postList, setPostList }) {
+export default function CreateLinkr({ token, setPostList }) {
   const { userInfo } = useUserInfo();
   const [tryPublish, setTryPublish] = useState(false);
   const refLink = useRef("");
@@ -50,22 +50,24 @@ export default function CreateLinkr({ token, postList, setPostList }) {
   }
 
   return (
-    <CreateLinkrStyled bg={userInfo.image}>
+    <CreateLinkrStyled data-test="publish-box" bg={userInfo.image}>
       <div></div>
       <form onSubmit={handleSubmit}>
         <h2>What are you going to share today?</h2>
         <input
+          data-test="link"
           disabled={tryPublish}
           type="url"
           placeholder="http://..."
           ref={refLink}
         />
         <textarea
+          data-test="description"
           disabled={tryPublish}
           placeholder="Awesome article about #javascript"
           ref={refText}
         />
-        <button disabled={tryPublish} type="submit">
+        <button data-test="publish-btn" disabled={tryPublish} type="submit">
           {!tryPublish ? "Publish" : "Publishing..."}
         </button>
       </form>
