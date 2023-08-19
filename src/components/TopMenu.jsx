@@ -206,7 +206,7 @@ const UserOptions = styled.button`
 `;
 
 const SearchBar = styled.div`
-  width: 38vh;
+  width: 563px;
   height: 45px;
   background-color: white;
   display: flex;
@@ -217,7 +217,7 @@ const SearchBar = styled.div`
   input {
     border: none;
     vertical-align: middle;
-    width: 35vh;
+    width: 550px;
     height: 45px;
     font-family: "Lato", sans-serif;
     font-size: 19px;
