@@ -16,9 +16,6 @@ export default function UserPage() {
   const { id } = useParams();
 
   useEffect(() => {
-    if (!auth || !auth.token) {
-      navigate("/");
-    }
     setTryGetList(true);
     setLoadingName(true);
     getUsername(id, auth.token, successUsername, failure);
@@ -42,7 +39,7 @@ export default function UserPage() {
       setLoadingName(false);
     }
     getUserPosts(id, auth.token, success, failureUsername);
-  }, [auth]);
+  }, []);
 
   return (
     <TimeLineStyled>

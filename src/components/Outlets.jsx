@@ -9,7 +9,7 @@ function SignOutOutlet() {
 
 function SignInOutlet() {
   const { auth } = useContext(AuthContext);
-  return auth && auth?.token ? <Navigate to="/home" /> : <Outlet />;
+  return auth && auth?.token ? <Navigate to="/timeline" /> : <Outlet />;
 }
 
 export { SignOutOutlet, SignInOutlet };

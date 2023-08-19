@@ -15,11 +15,7 @@ export default function TimeLine() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!auth || !auth?.token) {
-      navigate("/");
-    }
     setTryGetList(true);
-
     function success(data) {
       if (data.length === 0) setMessage("There are no posts yet");
       setPostList(data);
@@ -32,7 +28,7 @@ export default function TimeLine() {
       setTryGetList(false);
     }
     getTimeLine(auth?.token, success, failure);
-  }, [auth]);
+  }, []);
 
   return (
     <TimeLineStyled>
