@@ -130,7 +130,7 @@ export default function Linkr({ dataPost }) {
   }
 
   function failure(error) {
-    alert("Não foi possível realizar a edição. Tente novamente.");
+    alert("It was not possible to perform the edition. Try again.");
     setLoading(false);
   }
 
@@ -201,12 +201,11 @@ export default function Linkr({ dataPost }) {
             />
           )}
         </form>
-
         <div data-test="link" onClick={handleLink}>
           <section>
             <h3>{meta.title}</h3>
             <h4>{meta.description}</h4>
-            <h5 href={post.link}>{post.link}</h5>
+            <a href={post.link} >{post.link}</a>
           </section>
           <div></div>
         </div>
@@ -367,7 +366,7 @@ const PostStyled = styled.article`
           color: #9b9595;
           font-size: 11px;
         }
-        h5 {
+        a {
           color: #cecece;
           font-size: 11px;
         }
