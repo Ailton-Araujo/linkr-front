@@ -69,18 +69,19 @@ const TopMenu = () => {
               debounceTimeout={300}
               onChange={handleChange}
               ref={ref}
+              data-test="search"
             />
             <IoIosSearch className="icon" />
           </SearchBar>
           <Users>
             {usersSearch.length > 0
               ? usersSearch.map((user) => (
+                <User key={user.id} data-test="user-search">
                   <Link to={`/user/${user.id}`}>
-                    <User key={user.id}>
-                      <img src={user.image} alt={user.username} />
-                      <p>{user.username}</p>
-                    </User>
+                    <img src={user.image} alt={user.username} />
+                    <p>{user.username}</p>
                   </Link>
+                </User>
                 ))
               : ""}
           </Users>
