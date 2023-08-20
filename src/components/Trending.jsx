@@ -1,12 +1,13 @@
 import { styled } from "styled-components";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useWindowSize } from "@uidotdev/usehooks";
 import axios from "axios";
 
 export default function Trending() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const { token } = JSON.parse(localStorage.getItem("auth"));
-
+  const size = useWindowSize();
   const [trending, setTrending] = useState([]);
   const [error, setError] = useState(false);
 
@@ -16,7 +17,6 @@ export default function Trending() {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(({ data: arrayTrending }) => {
-        console.log(arrayTrending);
         setTrending(arrayTrending);
         setError(false);
       })
@@ -27,20 +27,26 @@ export default function Trending() {
   }, []);
 
   return (
-    <SCContainer data-test="trending">
-      <h1>trending</h1>
-      <hr />
+    <>
+      {size.width <= 800 ? (
+        ""
+      ) : (
+        <SCContainer data-test="trending">
+          <h1>trending</h1>
+          <hr />
 
-      <div>
-        {trending.map(({ hashtag }) => (
-          <Link to={`/hashtag/${hashtag}`}>
-            <SCHashtag data-test="hashtag"># {hashtag}</SCHashtag>
-          </Link>
-        ))}
+          <div>
+            {trending.map(({ hashtag }) => (
+              <Link to={`/hashtag/${hashtag}`}>
+                <SCHashtag data-test="hashtag"># {hashtag}</SCHashtag>
+              </Link>
+            ))}
 
-        {error && <div>error when looking for trending</div>}
-      </div>
-    </SCContainer>
+            {error && <div>error when looking for trending</div>}
+          </div>
+        </SCContainer>
+      )}
+    </>
   );
 }
 
@@ -51,10 +57,13 @@ const SCContainer = styled.div`
   border-radius: 16px;
   padding-top: 15px;
   padding-bottom: 30px;
-  margin-top: 18px;
-
+  margin-top: 188px;
   h1 {
     margin-left: 16px;
+    font-size: 27px;
+    font-weight: 700;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
     font-size: 27px;
     font-weight: 700;
   }
@@ -74,15 +83,17 @@ const SCContainer = styled.div`
     margin-left: 16px;
     margin-right: 16px;
     gap: 12px;
-    font-family: Lato;
+    font-family: "Lato", sans-serif;
     letter-spacing: 0.95px;
   }
 `;
 
 const SCHashtag = styled.span`
-  font-size: 19px;
-  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
-  color: white;
+  color: #fff;
+  font-family: "Lato", sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.95px;
 `;

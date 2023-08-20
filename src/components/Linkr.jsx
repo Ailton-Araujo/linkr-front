@@ -42,6 +42,7 @@ export default function Linkr({ dataPost }) {
             `Você, ${post.postLikes.find((e) => e !== userInfo.username)}`
           );
         setMessage(`${post.postLikes[0]}, ${post.postLikes[1]}`);
+        break;
       case 3:
         if (userLiked)
           return setMessage(
@@ -206,7 +207,7 @@ export default function Linkr({ dataPost }) {
           <section>
             <h3>{meta.title}</h3>
             <h4>{meta.description}</h4>
-            <h5 href={post.link}>{post.link}</h5>
+            <a href={post.link}>{post.link}</a>
           </section>
           <div></div>
         </div>
@@ -241,9 +242,9 @@ const EditInput = styled.input`
 `;
 
 const PostStyled = styled.article`
-  width: 620px;
+  width: 100%;
   padding: 20px;
-  margin-top: 18px;
+  margin-bottom: 18px;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -264,7 +265,7 @@ const PostStyled = styled.article`
   section {
     position: relative;
     font-family: "Lato", sans-serif;
-
+    word-break: break-all;
     div {
       width: 50px;
       height: 50px;
@@ -367,7 +368,7 @@ const PostStyled = styled.article`
           color: #9b9595;
           font-size: 11px;
         }
-        h5 {
+        a {
           color: #cecece;
           font-size: 11px;
         }

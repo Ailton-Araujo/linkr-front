@@ -1,9 +1,10 @@
 import { useEffect, useContext, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
-import Linkr from "../../components/LInkr";
+import Linkr from "../../components/Linkr";
+import Trending from "../../components/Trending";
 import { getUserPosts, getUsername } from "../../services/Api";
-import { TimeLineStyled } from "../TimeLine";
+import { TimeLineStyled, PostList } from "../TimeLine";
 
 export default function UserPage() {
   const { auth } = useContext(AuthContext);
@@ -12,7 +13,6 @@ export default function UserPage() {
   const [loadingName, setLoadingName] = useState(false);
   const [message, setMessage] = useState("");
   const [username, setUsername] = useState("");
-  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -43,14 +43,17 @@ export default function UserPage() {
 
   return (
     <TimeLineStyled>
-      <h1>{loadingName ? "" : `${username}'s posts`}</h1>
-      {tryGetList ? (
-        <h2>Loading</h2>
-      ) : postList.length === 0 ? (
-        <h2>{message}</h2>
-      ) : (
-        postList.map((post) => <Linkr key={post.post.id} dataPost={post} />)
-      )}
+      <PostList>
+        <h1>{loadingName ? "" : `${username}'s posts`}</h1>
+        {tryGetList ? (
+          <h2>Loading</h2>
+        ) : postList.length === 0 ? (
+          <h2>{message}</h2>
+        ) : (
+          postList.map((post) => <Linkr key={post.post.id} dataPost={post} />)
+        )}
+      </PostList>
+      <Trending />
     </TimeLineStyled>
   );
 }
