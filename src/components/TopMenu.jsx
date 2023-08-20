@@ -76,12 +76,12 @@ const TopMenu = () => {
           <Users>
             {usersSearch.length > 0
               ? usersSearch.map((user) => (
-                <User key={user.id} data-test="user-search">
-                  <Link to={`/user/${user.id}`}>
+                <Link to={`/user/${user.id}`} data-test="user-search" key={user.id}>
+                  <User>
                     <img src={user.image} alt={user.username} />
                     <p>{user.username}</p>
-                  </Link>
-                </User>
+                  </User>
+                </Link>
                 ))
               : ""}
           </Users>
