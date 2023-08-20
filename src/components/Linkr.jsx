@@ -205,7 +205,7 @@ export default function Linkr({ dataPost }) {
           <section>
             <h3>{meta.title}</h3>
             <h4>{meta.description}</h4>
-            <a>{post.link}</a>
+            <a href={post.link} >{post.link}</a>
           </section>
           <div></div>
         </div>
