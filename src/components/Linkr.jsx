@@ -42,6 +42,7 @@ export default function Linkr({ dataPost }) {
             `Você, ${post.postLikes.find((e) => e !== userInfo.username)}`
           );
         setMessage(`${post.postLikes[0]}, ${post.postLikes[1]}`);
+        break;
       case 3:
         if (userLiked)
           return setMessage(
@@ -240,9 +241,9 @@ const EditInput = styled.input`
 `;
 
 const PostStyled = styled.article`
-  width: 620px;
+  width: 100%;
   padding: 20px;
-  margin-top: 18px;
+  margin-bottom: 18px;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -263,7 +264,7 @@ const PostStyled = styled.article`
   section {
     position: relative;
     font-family: "Lato", sans-serif;
-
+    word-break: break-all;
     div {
       width: 50px;
       height: 50px;

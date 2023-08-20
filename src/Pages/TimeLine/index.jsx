@@ -1,6 +1,5 @@
 import { useEffect, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import AuthContext from "../../contexts/AuthContext";
 import CreateLinkr from "./CreateLinkr";
 import Linkr from "../../components/Linkr";
@@ -12,7 +11,6 @@ export default function TimeLine() {
   const [postList, setPostList] = useState([]);
   const [tryGetList, setTryGetList] = useState(false);
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     setTryGetList(true);
@@ -32,22 +30,40 @@ export default function TimeLine() {
 
   return (
     <TimeLineStyled>
-      <h1>timeline</h1>
-      <CreateLinkr token={auth?.token} setPostList={setPostList} />
-      {tryGetList ? (
-        <h2 data-test="message">Loading</h2>
-      ) : postList.length === 0 ? (
-        <h2 data-test="message">{message}</h2>
-      ) : (
-        postList.map((post) => <Linkr key={post.post.id} dataPost={post} />)
-      )}
+      <PostList>
+        <h1>timeline</h1>
+        <CreateLinkr token={auth?.token} setPostList={setPostList} />
+        {tryGetList ? (
+          <h2 data-test="message">Loading</h2>
+        ) : postList.length === 0 ? (
+          <h2 data-test="message">{message}</h2>
+        ) : (
+          postList.map((post) => <Linkr key={post.post.id} dataPost={post} />)
+        )}
+      </PostList>
+      <Trending />
     </TimeLineStyled>
   );
 }
 
-export const TimeLineStyled = styled.main`
-  margin-top: 30px;
-  margin-bottom: 15px;
+const TimeLineStyled = styled.main`
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  gap: 15px;
+  margin: 30px auto 15px;
+  @media (max-width: 800px) {
+    width: 90%;
+    margin: 45px auto 15px;
+  }
+  @media (max-width: 500px) {
+    width: 100%;
+  }
+`;
+
+const PostList = styled.section`
+  width: 60%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -59,6 +75,7 @@ export const TimeLineStyled = styled.main`
     font-family: "Oswald", sans-serif;
     font-size: 43px;
     font-weight: 700;
+    align-self: flex-start;
   }
   h2 {
     margin-top: 60px;
@@ -68,6 +85,18 @@ export const TimeLineStyled = styled.main`
     font-weight: 700;
   }
   @media (max-width: 800px) {
-    margin-top: 60px;
+    width: 90%;
+    margin: auto;
+    h1 {
+      padding-left: 15px;
+    }
+  }
+  @media (max-width: 500px) {
+    width: 100%;
+    article {
+      border-radius: 0px;
+    }
   }
 `;
+
+export { TimeLineStyled, PostList };

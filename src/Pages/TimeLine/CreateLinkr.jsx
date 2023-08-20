@@ -31,7 +31,6 @@ export default function CreateLinkr({ token, setPostList }) {
     function success(data) {
       refLink.current.value = "";
       refText.current.value = "";
-      console.log(data);
       setPostList((prevState) => [data, ...prevState]);
       setTryPublish(false);
     }
@@ -39,12 +38,7 @@ export default function CreateLinkr({ token, setPostList }) {
     function failure(error) {
       refLink.current.value = "";
       refText.current.value = "";
-      console.log(error);
-      if (error.response) {
-        alert(error.response.data);
-      } else {
-        alert(error.message);
-      }
+      alert("There was an error publishing your link");
       setTryPublish(false);
     }
     postLink(newPost, token, success, failure);
@@ -77,9 +71,10 @@ export default function CreateLinkr({ token, setPostList }) {
 }
 
 const CreateLinkrStyled = styled.article`
-  width: 620px;
+  width: 100%;
   border-radius: 16px;
   padding: 20px 20px 55px;
+  margin-bottom: 18px;
   position: relative;
   display: flex;
   justify-content: space-between;
