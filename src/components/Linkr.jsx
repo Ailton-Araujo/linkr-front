@@ -130,7 +130,7 @@ export default function Linkr({ dataPost }) {
   }
 
   function failure(error) {
-    alert("Não foi possível realizar a edição. Tente novamente.");
+    alert("It was not possible to perform the edition. Try again.");
     setLoading(false);
   }
 
