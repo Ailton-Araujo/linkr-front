@@ -12,12 +12,6 @@ const Login = () => {
   const [body, setBody] = useState({ email: "", password: "" });
   const { auth, loginAuth } = useContext(AuthContext);
 
-  useEffect(() => {
-    if (auth && auth?.token) {
-      navigate("/timeline");
-    }
-  }, []);
-
   const handleSubmit = (e) => {
     if (body.email === "" || body.password === "") {
       return alert("Todos os campos são obrigatórios!");
@@ -107,7 +101,7 @@ const LogoContainer = styled.section`
     position: none;
     article {
       margin: 0;
-      self-align: center;
+      align-self: center;
       top: initial;
       transform: none;
       position: none;

@@ -129,7 +129,7 @@ const LogoContainer = styled.section`
     position: none;
     article {
       margin: 0;
-      self-align: center;
+      align-self: center;
       top: initial;
       transform: none;
       position: none;
