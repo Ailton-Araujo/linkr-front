@@ -1,7 +1,7 @@
 import { useEffect, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
-import Linkr from "../../components/LInkr";
+import Linkr from "../../components/Linkr";
 import { getUserPosts, getUsername } from "../../services/Api";
 import { TimeLineStyled } from "../TimeLine";
 
