@@ -39,7 +39,7 @@ export default function HashtagPage() {
           {loading ? (
             <SCLoading>Loading...</SCLoading>
           ) : (
-            posts.map((post) => <Linkr key={post.post.id} dataPost={post} />)
+            posts.map((post) => <Linkr key={post.id} post={post} />)
           )}
 
           {error && (

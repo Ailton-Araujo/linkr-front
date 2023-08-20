@@ -8,9 +8,9 @@ import AuthContext from "../contexts/AuthContext";
 import useUserInfo from "../hooks/useUserInfo";
 import HashTagsCard from "./HashtagsCard";
 import { postLike, editPost } from "../services/Api";
+import { getMeta } from "../services/MetaApi";
 
-export default function Linkr({ dataPost }) {
-  const { post, meta } = dataPost;
+export default function Linkr({ post }) {
   if (!post.postLikes[0]) post.postLikes.length = 0;
   const { auth } = useContext(AuthContext);
   const { userInfo } = useUserInfo();
@@ -19,6 +19,12 @@ export default function Linkr({ dataPost }) {
     post.postLikes.includes(userInfo.username)
   );
   const [message, setMessage] = useState("");
+  const [meta, setMeta] = useState({
+    title: "",
+    description: "",
+    image: "",
+    url: post.link,
+  });
   const [editor, setEditor] = useState(false);
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState(post.description);
@@ -70,6 +76,30 @@ export default function Linkr({ dataPost }) {
         );
         break;
     }
+
+    function success(res) {
+      setMeta({
+        title: res.data?.title,
+        description: res.data?.description,
+        image: res.data?.images[0],
+        url: res.data?.url,
+      });
+    }
+    // function success(res) {
+    //   console.log(res);
+    //   setMeta({
+    //     title: data?.title,
+    //     description: data?.description,
+    //     image: data?.topImage,
+    //     url: data?.url,
+    //   });
+    // }
+
+    function failure(error) {
+      console.log(error);
+    }
+
+    getMeta(post.link, success, failure);
   }, [editor, post.postLikes.length]);
 
   function handleLike() {
@@ -120,20 +150,21 @@ export default function Linkr({ dataPost }) {
     }
   }
 
-  function success(data) {
-    setOriginal(text);
-    setEditor(false);
-    setLoading(false);
-  }
-
-  function failure(error) {
-    alert("It was not possible to perform the edition. Try again.");
-    setLoading(false);
-  }
-
   function handleSubmit(e, id) {
     e.preventDefault();
     setLoading(true);
+
+    function success(data) {
+      setOriginal(text);
+      setEditor(false);
+      setLoading(false);
+    }
+
+    function failure(error) {
+      alert("It was not possible to perform the edition. Try again.");
+      setLoading(false);
+    }
+
     editPost(
       id,
       {
@@ -150,74 +181,88 @@ export default function Linkr({ dataPost }) {
   }
 
   return (
-    <PostStyled data-test="post" bg={post.user.image} bgspan={meta.image}>
-      <section>
-        <div></div>
-        <button
-          data-test="like-btn"
-          data-tooltip-id={post.id}
-          disabled={tryLike}
-          onClick={handleLike}
-          type="button"
-        >
-          {userLiked ? <Liked /> : <NotLiked />}
-        </button>
-        <p data-test="counter">{post.postLikes.length} likes</p>
-      </section>
-      <div>
-        <form onSubmit={(e) => handleSubmit(e, post.id)}>
-          <PostHeader>
-            <h3 data-test="username">
-              <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
-            </h3>
-            {post.user.id === userInfo.id ? (
-              <button
-                type="button"
-                data-test="edit-btn"
-                onClick={toggleEditMode}
-              >
-                <FaPencilAlt className="icon" />
-              </button>
-            ) : (
-              ""
-            )}
-          </PostHeader>
-          {!editor ? (
-            <h4 data-test="description">
-              <HashTagsCard>{original}</HashTagsCard>
-            </h4>
-          ) : (
-            <EditInput
-              type="text"
-              value={text}
-              onChange={handleChange}
-              ref={inputReference}
-              onKeyDown={handleKeyDown}
-              disabled={loading}
-              data-test="edit-input"
-            />
-          )}
-        </form>
-        <Link data-test="link" to={post.link} target="_blank">
-          <section>
-            <h3>{meta.title}</h3>
-            <h4>{meta.description}</h4>
-            <h5>{post.link}</h5>
-          </section>
+    <PostContainer>
+      <PostStyled data-test="post" bg={post.user.image} bgspan={meta.image}>
+        <section>
           <div></div>
-        </Link>
-      </div>
-
+          <button
+            data-test="like-btn"
+            disabled={tryLike}
+            onClick={handleLike}
+            type="button"
+          >
+            {userLiked ? <Liked /> : <NotLiked />}
+          </button>
+          <p
+            data-test="counter"
+            data-tooltip-id={post.id}
+            data-tooltip-content={message}
+          >
+            {post.postLikes.length} likes
+          </p>
+        </section>
+        <div>
+          <form onSubmit={(e) => handleSubmit(e, post.id)}>
+            <PostHeader>
+              <h3 data-test="username">
+                <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
+              </h3>
+              {post.user.id === userInfo.id ? (
+                <button
+                  type="button"
+                  data-test="edit-btn"
+                  onClick={toggleEditMode}
+                >
+                  <FaPencilAlt className="icon" />
+                </button>
+              ) : (
+                ""
+              )}
+            </PostHeader>
+            {!editor ? (
+              <h4 data-test="description">
+                <HashTagsCard>{original}</HashTagsCard>
+              </h4>
+            ) : (
+              <EditInput
+                type="text"
+                value={text}
+                onChange={handleChange}
+                ref={inputReference}
+                onKeyDown={handleKeyDown}
+                disabled={loading}
+                data-test="edit-input"
+              />
+            )}
+          </form>
+          <Link data-test="link" to={post.link} target="_blank">
+            <section>
+              <h3>{meta.title}</h3>
+              <h4>{meta.description}</h4>
+              <h5>{meta.url}</h5>
+            </section>
+            <div></div>
+          </Link>
+        </div>
+      </PostStyled>
       <Tooltip
-        data-test="tooltip"
         id={post.id}
-        content={message}
+        render={({ content }) => <p data-test="tooltip">{content}</p>}
         place="bottom"
         className="styleToolTip"
       />
-    </PostStyled>
+    </PostContainer>
   );
 }
+const PostContainer = styled.span`
+  width: 100%;
+  .styleToolTip {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #505050;
+    font-size: 11px;
+    font-weight: 700;
+  }
+`;
 
 const PostHeader = styled.header`
   display: flex;
@@ -291,13 +336,6 @@ const PostStyled = styled.article`
     }
   }
 
-  .styleToolTip {
-    border-radius: 3px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #505050;
-    font-size: 11px;
-    font-weight: 700;
-  }
   .icon {
     color: white;
     width: 23px;
