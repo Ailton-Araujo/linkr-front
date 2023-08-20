@@ -100,10 +100,6 @@ export default function Linkr({ dataPost }) {
     postLike(newLike, auth.token, success, failure);
   }
 
-  function handleLink() {
-    window.open(post.link, "_blank").focus();
-  }
-
   function toggleEditMode() {
     handleCancelChanges();
     setEditor(!editor);
@@ -202,14 +198,14 @@ export default function Linkr({ dataPost }) {
             />
           )}
         </form>
-        <div data-test="link" onClick={handleLink}>
+        <Link data-test="link" to={post.link} target="_blank">
           <section>
             <h3>{meta.title}</h3>
             <h4>{meta.description}</h4>
-            <a href={post.link} >{post.link}</a>
+            <h5>{post.link}</h5>
           </section>
           <div></div>
-        </div>
+        </Link>
       </div>
 
       <Tooltip
@@ -345,7 +341,7 @@ const PostStyled = styled.article`
       }
     }
 
-    div {
+    a:nth-child(2) {
       width: 100%;
       border-radius: 11px;
       border: 1px solid #4d4d4d;
@@ -367,7 +363,7 @@ const PostStyled = styled.article`
           color: #9b9595;
           font-size: 11px;
         }
-        a {
+        h5 {
           color: #cecece;
           font-size: 11px;
         }
