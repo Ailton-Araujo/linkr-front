@@ -38,7 +38,7 @@ export default function Trending() {
           <div>
             {trending.map(({ hashtag }) => (
               <Link to={`/hashtag/${hashtag}`}>
-                <SCHashtag data-test="hashtag"># {hashtag}</SCHashtag>
+                <SCHashtag data-test="hashtag">#{hashtag}</SCHashtag>
               </Link>
             ))}
 
