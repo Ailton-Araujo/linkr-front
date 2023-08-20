@@ -201,15 +201,16 @@ export default function Linkr({ dataPost }) {
             />
           )}
         </form>
-
-        <div data-test="link" onClick={handleLink}>
+      <a data-test="link" href={post.link}>
+        <div onClick={handleLink}>
           <section>
             <h3>{meta.title}</h3>
             <h4>{meta.description}</h4>
-            <h5 href={post.link}>{post.link}</h5>
+            <h5>{post.link}</h5>
           </section>
           <div></div>
         </div>
+      </a>
       </div>
 
       <Tooltip
