@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AuthContext from "../../contexts/AuthContext";
 import CreateLinkr from "./CreateLinkr";
-import Linkr from "../../components/LInkr";
+import Linkr from "../../components/Linkr";
 import Trending from "../../components/Trending";
 import { getTimeLine } from "../../services/Api";
 
