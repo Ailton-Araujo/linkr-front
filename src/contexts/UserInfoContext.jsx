@@ -23,11 +23,12 @@ export function UserInfoProvider({ children }) {
     }
 
     function failure(error) {
-      logoutAuth();
       if (error.response) {
         alert(error.response.data);
+        logoutAuth();
       } else {
-        alert(error.message);
+        console.log(error.message);
+        // alert(error.message);
       }
     }
     if (token) getUser(token, success, failure);
