@@ -2,15 +2,16 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { FaPencilAlt } from "react-icons/fa";
+import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import { Tooltip } from "react-tooltip";
 import AuthContext from "../contexts/AuthContext";
 import useUserInfo from "../hooks/useUserInfo";
 import HashTagsCard from "./HashtagsCard";
 import { postLike, editPost } from "../services/Api";
 import { getMeta } from "../services/MetaApi";
+import DeleteModal from "./DeleteModal";
 
-export default function Linkr({ post }) {
+export default function Linkr({ post, setPostList }) {
   if (!post.postLikes[0]) post.postLikes.length = 0;
   const { auth } = useContext(AuthContext);
   const { userInfo } = useUserInfo();
@@ -29,6 +30,7 @@ export default function Linkr({ post }) {
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState(post.description);
   const [original, setOriginal] = useState(post.description);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const inputReference = useRef(null);
 
   useEffect(() => {
@@ -93,7 +95,6 @@ export default function Linkr({ post }) {
     //     url: data?.url,
     //   });
     // }
-
     function failure(error) {
       console.log(error);
     }
@@ -132,6 +133,10 @@ export default function Linkr({ post }) {
   function toggleEditMode() {
     handleCancelChanges();
     setEditor(!editor);
+  }
+
+  function openDeleteModal() {
+    setModalIsOpen(true);
   }
 
   function handleChange(e) {
@@ -207,13 +212,22 @@ export default function Linkr({ post }) {
                 <Link to={`/user/${post.user.id}`}>{post.user.username}</Link>
               </h3>
               {post.user.id === userInfo.id ? (
-                <button
-                  type="button"
-                  data-test="edit-btn"
-                  onClick={toggleEditMode}
-                >
-                  <FaPencilAlt className="icon" />
-                </button>
+                <SCButtonGroup>
+                  <button
+                    type="button"
+                    data-test="edit-btn"
+                    onClick={toggleEditMode}
+                  >
+                    <FaPencilAlt className="icon" />
+                  </button>
+                  <button
+                    type="button"
+                    data-test="delete-btn"
+                    onClick={() => openDeleteModal()}
+                  >
+                    <FaTrash className="icon" />
+                  </button>
+                </SCButtonGroup>
               ) : (
                 ""
               )}
@@ -250,9 +264,18 @@ export default function Linkr({ post }) {
         place="bottom"
         className="styleToolTip"
       />
+
+      <DeleteModal
+        isOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        idPost={post.id}
+        userToken={auth.token}
+        updatePostList={setPostList}
+      />
     </PostContainer>
   );
 }
+
 const PostContainer = styled.span`
   width: 100%;
   .styleToolTip {
@@ -338,6 +361,7 @@ const PostStyled = styled.article`
   .icon {
     color: white;
     width: 23px;
+    cursor: pointer;
   }
 
   button {
@@ -425,8 +449,14 @@ const Liked = styled(AiFillHeart)`
   height: 25px;
   color: #ac0000;
 `;
+
 const NotLiked = styled(AiOutlineHeart)`
   width: 25px;
   height: 25px;
   color: #fff;
+`;
+
+const SCButtonGroup = styled.fieldset`
+  display: flex;
+  gap: 10px;
 `;

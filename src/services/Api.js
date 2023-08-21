@@ -97,6 +97,10 @@ function editPost(id, newDesc, token, success, failure) {
     });
 }
 
+function deletePost(id, token) {
+  return axios.delete(`/posts/${id}`, tokenProvider(token));
+}
+
 export {
   getUser,
   postLink,
@@ -106,4 +110,5 @@ export {
   queryUsers,
   editPost,
   postLike,
+  deletePost,
 };

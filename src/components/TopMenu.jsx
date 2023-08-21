@@ -92,7 +92,6 @@ const TopMenu = () => {
             </Users>
           </SearchBox>
         </section>
-
         <UserOptions
           onBlur={() => onBlurDropMenu(dropDown)}
           dropdown={dropDown}

@@ -26,6 +26,7 @@ const Login = () => {
         navigate("/timeline");
       })
       .catch((err) => {
+        console.log(err);
         if (err.response.status === 401) {
           setDisabled(false);
           alert(`${err.response.data.message}`);

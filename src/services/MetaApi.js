@@ -10,7 +10,6 @@ export function getMeta(url, success, failure) {
       failure(error);
     });
 }
-
 // export async function getMeta(url, success, failure) {
 //   const options = {
 //     method: "POST",
@@ -32,3 +31,4 @@ export function getMeta(url, success, failure) {
 //     failure(error);
 //   }
 // }
+
