@@ -4,7 +4,6 @@ export function getMeta(url, success, failure) {
   axios
     .get(`https://jsonlink.io/api/extract?url=${url}`)
     .then((res) => {
-      console.log(res);
       success(res);
     })
     .catch((error) => {
