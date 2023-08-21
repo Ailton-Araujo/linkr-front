@@ -76,12 +76,16 @@ const TopMenu = () => {
           <Users>
             {usersSearch.length > 0
               ? usersSearch.map((user) => (
-                <Link to={`/user/${user.id}`} data-test="user-search" key={user.id}>
-                  <User>
-                    <img src={user.image} alt={user.username} />
-                    <p>{user.username}</p>
-                  </User>
-                </Link>
+                  <Link
+                    to={`/user/${user.id}`}
+                    data-test="user-search"
+                    key={user.id}
+                  >
+                    <User>
+                      <img src={user.image} alt={user.username} />
+                      <p>{user.username}</p>
+                    </User>
+                  </Link>
                 ))
               : ""}
           </Users>
@@ -216,7 +220,7 @@ const SearchBar = styled.div`
     return border ? `border-radius: 8px 8px 0px 0px;` : ` border-radius:8px;`;
   }};
   padding: 0 10px;
-  z-index: 5;
+  z-index: 3;
   input {
     width: 100%;
     height: 45px;
@@ -247,9 +251,10 @@ const SearchBox = styled.div`
   }
   @media (max-width: 600px) {
     width: 90%;
-    position: absolute;
+    position: fixed;
     top: 80px;
     left: 5%;
+    z-index: 3;
   }
 `;
 

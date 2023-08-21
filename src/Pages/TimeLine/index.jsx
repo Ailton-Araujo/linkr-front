@@ -30,6 +30,7 @@ export default function TimeLine() {
     }
     getTimeLine(auth?.token, success, failure);
   }, []);
+
   return (
     <TimeLineStyled>
       <PostList>
@@ -40,7 +41,9 @@ export default function TimeLine() {
         ) : postList.length === 0 ? (
           <h2 data-test="message">{message}</h2>
         ) : (
-          postList.map((post) => <Linkr key={post.id} post={post} />)
+          postList.map((post) => (
+            <Linkr key={post.id} post={post} setPostList={setPostList} />
+          ))
         )}
       </PostList>
       <Trending />
