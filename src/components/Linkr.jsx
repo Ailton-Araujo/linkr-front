@@ -87,18 +87,14 @@ export default function Linkr({ post, setPostList }) {
         url: res.data?.url,
       });
     }
-
-    /*
-    function success({ data }) {
-      //console.log(res);
-      setMeta({
-        title: data?.title,
-        description: data?.description,
-        image: data?.topImage,
-        url: data?.url,
-      });
-    }
-    */
+    // function success(data) {
+    //   setMeta({
+    //     title: data?.title,
+    //     description: data?.description,
+    //     image: data?.topImage,
+    //     url: data?.url,
+    //   });
+    // }
     function failure(error) {
       console.log(error);
     }
