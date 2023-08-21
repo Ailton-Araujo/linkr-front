@@ -50,7 +50,9 @@ export default function UserPage() {
         ) : postList.length === 0 ? (
           <h2>{message}</h2>
         ) : (
-          postList.map((post) => <Linkr key={post.id} post={post} />)
+          postList.map((post) => (
+            <Linkr key={post.id} post={post} setPostList={setPostList} />
+          ))
         )}
       </PostList>
       <Trending />
