@@ -20,6 +20,9 @@ export default function TimeLine() {
       setTryGetList(false);
     }
     function failure(error) {
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
+      );
       setMessage(
         "An error occured while trying to fetch the posts, please refresh the page"
       );
