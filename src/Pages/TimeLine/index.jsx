@@ -59,7 +59,7 @@ const TimeLineStyled = styled.main`
     width: 90%;
     margin: 45px auto 15px;
   }
-  @media (max-width: 500px) {
+  @media (max-width: 520px) {
     width: 100%;
   }
 `;
@@ -93,7 +93,7 @@ const PostList = styled.section`
       padding-left: 15px;
     }
   }
-  @media (max-width: 500px) {
+  @media (max-width: 520px) {
     width: 100%;
     article {
       border-radius: 0px;

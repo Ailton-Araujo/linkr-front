@@ -55,34 +55,56 @@ export default function HashtagPage() {
 }
 
 const SCContainer = styled.div`
-  font-family: Oswald;
-  width: 945px;
+  font-family: "Oswald", sans-serif;
+  width: 80%;
   background: #333333;
-  height: auto;
   color: #ffffff;
-  margin: auto;
-  padding-top: 125px;
-  padding-bottom: 125px;
-
+  margin: 30px auto 15px;
   > div {
     width: 100%;
     display: flex;
-    gap: 25px;
-    align-items: center;
+    gap: 15px;
+    align-items: start;
     justify-content: center;
-    margin-top: 40px;
+    div {
+      margin-top: 0px;
+    }
+  }
+  @media (max-width: 800px) {
+    width: 90%;
+    margin: 0px auto 15px;
+  }
+  @media (max-width: 520px) {
+    width: 100%;
   }
 `;
 
 const SCContent = styled.div`
-  width: 360px;
+  width: 60%;
   height: auto;
+  @media (max-width: 800px) {
+    width: 90%;
+    margin: auto;
+  }
+  @media (max-width: 520px) {
+    width: 100%;
+    article {
+      border-radius: 0px;
+    }
+  }
 `;
 
 const SCTitle = styled.h1`
+  margin-top: 130px;
+  margin-bottom: 45px;
   color: #fff;
   font-size: 43px;
   font-weight: 700;
+  @media (max-width: 800px) {
+    width: 90%;
+    margin: 145px auto 45px;
+    padding-left: 15px;
+  }
 `;
 
 const SCErrorMessage = styled.div`
