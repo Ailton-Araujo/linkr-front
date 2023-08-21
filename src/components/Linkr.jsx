@@ -85,8 +85,7 @@ export default function Linkr({ post }) {
         url: res.data?.url,
       });
     }
-    // function success(res) {
-    //   console.log(res);
+    // function success(data) {
     //   setMeta({
     //     title: data?.title,
     //     description: data?.description,

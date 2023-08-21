@@ -26,6 +26,7 @@ export function getMeta(url, success, failure) {
 //   };
 //   try {
 //     const response = await axios.request(options);
+//     console.log(response.data);
 //     success(response.data);
 //   } catch (error) {
 //     failure(error);

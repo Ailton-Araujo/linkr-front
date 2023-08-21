@@ -102,7 +102,7 @@ const SCTitle = styled.h1`
   font-weight: 700;
   @media (max-width: 800px) {
     width: 90%;
-    margin: 145px auto 45px;
+    margin: 155px auto 45px;
     padding-left: 15px;
   }
 `;

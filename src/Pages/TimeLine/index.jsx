@@ -90,6 +90,7 @@ const PostList = styled.section`
     width: 90%;
     margin: auto;
     h1 {
+      margin-top: 110px;
       padding-left: 15px;
     }
   }
