@@ -101,6 +101,10 @@ function deletePost(id, token) {
   return axios.delete(`/posts/${id}`, tokenProvider(token));
 }
 
+function repostPost(id, token) {
+  return axios.post(`/posts/share/${id}`, {}, tokenProvider(token));
+}
+
 export {
   getUser,
   postLink,
@@ -111,4 +115,5 @@ export {
   editPost,
   postLike,
   deletePost,
+  repostPost,
 };
