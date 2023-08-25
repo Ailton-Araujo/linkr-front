@@ -66,7 +66,7 @@ export default function UserPage() {
       setButtonVisible(true);
     }
     getUserPosts(id, auth.token, success, failureUsername);
-  }, []);
+  }, [id]);
 
   function followUnfollow(buttonAction) {
     setDisabled(true);

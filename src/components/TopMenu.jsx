@@ -52,6 +52,13 @@ const TopMenu = () => {
       setSearch(e.target.value);
     } else setUsersSearch([]);
   }
+
+  function resetSearchBar() {
+      setSearch("");
+      setUsersSearch([]);
+  };
+
+
   return (
     <header>
       <Navbar>
@@ -82,7 +89,7 @@ const TopMenu = () => {
                       data-test="user-search"
                       key={user.id}
                     >
-                      <User>
+                      <User onClick={resetSearchBar}>
                         <img src={user.image} alt={user.username} />
                         <p>{user.username}</p>
                         {user.followed === "True" ? <li>following</li> : ""}
