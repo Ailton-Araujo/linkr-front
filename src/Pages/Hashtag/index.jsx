@@ -83,7 +83,10 @@ const SCContainer = styled.div`
 
 const SCContent = styled.div`
   width: 60%;
-  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   @media (max-width: 800px) {
     width: 90%;
     margin: auto;

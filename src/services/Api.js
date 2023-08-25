@@ -85,6 +85,18 @@ function postLike(newLike, token, success, failure) {
     });
 }
 
+function postComment(newComment, token, success, failure) {
+  axios
+    .post("/comments", newComment, tokenProvider(token))
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((error) => {
+      failure(error);
+      console.log(error);
+    });
+}
+
 function editPost(id, newDesc, token, success, failure) {
   axios
     .patch(`/posts/${id}`, newDesc, tokenProvider(token))
@@ -93,7 +105,6 @@ function editPost(id, newDesc, token, success, failure) {
     })
     .catch((error) => {
       failure(error);
-      console.log(error);
     });
 }
 
@@ -110,5 +121,6 @@ export {
   queryUsers,
   editPost,
   postLike,
+  postComment,
   deletePost,
 };
