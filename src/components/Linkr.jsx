@@ -17,7 +17,7 @@ import RepostModal from "./RepostModal";
 import ShareBox from "./ShareBox";
 
 export default function Linkr({ post, setPostList }) {
-  if (!post.postLikes[0]) post.postLikes.length = 0;
+  if (!post.postLikes) post.postLikes = [];
   const { auth } = useContext(AuthContext);
   const { userInfo } = useUserInfo();
   const [tryLike, setTryLike] = useState(false);
@@ -25,8 +25,8 @@ export default function Linkr({ post, setPostList }) {
     post.postLikes.includes(userInfo.username)
   );
   const [openComments, setOpenComments] = useState(false);
-  const [numComments, setNumComments] = useState(
-    !post.postComments ? 0 : post.postComments.length
+  const [comments, setComments] = useState(
+    !post.postComments ? [] : post.postComments
   );
   const [message, setMessage] = useState("");
   const [meta, setMeta] = useState({
@@ -229,7 +229,7 @@ export default function Linkr({ post, setPostList }) {
           >
             <img src={CommentsIcon} />
           </button>
-          <p data-test="comment-counter">{`${numComments} comments`}</p>
+          <p data-test="comment-counter">{`${comments.length} comments`}</p>
 
           <ShareBox
             setModalIsOpen={setRepostModalIsOpen}
@@ -293,8 +293,9 @@ export default function Linkr({ post, setPostList }) {
         <PostComments
           token={auth?.token}
           postId={post.id}
-          comments={post.postComments}
-          numComments={numComments}
+          postAuthor={post.user}
+          comments={comments}
+          setComments={setComments}
         />
       ) : (
         ""

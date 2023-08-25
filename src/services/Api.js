@@ -89,7 +89,7 @@ function postComment(newComment, token, success, failure) {
   axios
     .post("/comments", newComment, tokenProvider(token))
     .then((res) => {
-      console.log(res);
+      success();
     })
     .catch((error) => {
       failure(error);
@@ -218,5 +218,5 @@ export {
   getAnyFollower,
   getNewPosts,
   getMoreUserPosts,
-  getMoreHashtagPosts
+  getMoreHashtagPosts,
 };
