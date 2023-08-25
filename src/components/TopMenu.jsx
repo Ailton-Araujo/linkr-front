@@ -53,11 +53,10 @@ const TopMenu = () => {
     } else setUsersSearch([]);
   }
 
-  function resetSearchBar() {
-      setSearch("");
-      setUsersSearch([]);
+  function resetSearchBar () {
+    setSearch("");
+    setUsersSearch([]);
   };
-
 
   return (
     <header>
