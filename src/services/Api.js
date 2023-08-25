@@ -150,8 +150,9 @@ function followAndUnfollow(action, id, token, enableButton, setFollowedIds) {
         enableButton(action);
       })
       .catch((err) => {
-        enableButton();
+        enableButton(action);
         alert(`Houve um erro ao executar a ação. ${err.response?.data}`);
+        console.log(err)
       });
   } else {
     axios
@@ -165,7 +166,7 @@ function followAndUnfollow(action, id, token, enableButton, setFollowedIds) {
       })
       .catch((err) => {
         alert(`Houve um erro ao executar a ação. ${err.response?.data}`);
-        enableButton();
+        enableButton(action);
       });
   }
 }
