@@ -3,11 +3,13 @@ import { useParams } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
 import Linkr from "../../components/Linkr";
 import Trending from "../../components/Trending";
-import { followAndUnfollow, getUserPosts, getUsername, isFollowing } from "../../services/Api";
+import { followAndUnfollow, getUserPosts, getUsername, isFollowing, getMoreUserPosts } from "../../services/Api";
 import { TimeLineStyled, PostList } from "../TimeLine";
 import { styled } from "styled-components";
 import FollowButton from "../../components/follow/FollowButton";
 import useUserInfo from "../../hooks/useUserInfo";
+import InfiniteScroll from 'react-infinite-scroller';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 export default function UserPage() {
   const { auth } = useContext(AuthContext);
@@ -21,6 +23,8 @@ export default function UserPage() {
   const [buttonAction, setButtonAction] = useState("Follow");
   const [disabled, setDisabled] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(false);
+  const [loadMorePosts, setLoadMorePosts] = useState(true);
+  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     if(isFollowing(id, auth?.token, successFollowCheck, errorFollowCheck));
@@ -43,6 +47,7 @@ export default function UserPage() {
         "An error occured while trying to fetch the posts, please refresh the page"
       );
       setTryGetList(false);
+      setLoadMorePosts(false);
     }
     function successUsername(data) {
       setUsername(data);
@@ -72,6 +77,20 @@ export default function UserPage() {
     };
   };
 
+  function loadMore() {
+    function success(data){
+      if(data.length > 0)
+        setPostList([...postList, ...data]);
+      else
+        setLoadMorePosts(false);
+    }
+    function failure (error) {
+      console.log(error);
+    }
+    setOffset(offset + 1);
+    getMoreUserPosts(id, offset + 1, auth.token, success, failure);
+  }
+
   return (
     <Formatter>
     <TimeLineStyled>
@@ -80,15 +99,27 @@ export default function UserPage() {
         <h1>{loadingName ? "" : `${username}'s posts`}</h1>
         <FollowButton visibility={buttonVisible} disabled={disabled} func={followUnfollow} paramid={id} authid={userInfo.id} action={buttonAction}></FollowButton>
         </FlexUserName>
-        {tryGetList ? (
-          <h2>Loading</h2>
-        ) : postList.length === 0 ? (
-          <h2>{message}</h2>
-        ) : (
-          postList.map((post) => (
-            <Linkr key={post.id} post={post} setPostList={setPostList} />
-          ))
-        )}
+        <InfiniteScroll
+        pageStart={0}
+        loadMore={loadMore}
+        hasMore={loadMorePosts}
+        initialLoad = {false}
+        loader={
+        <div className="loader" key={0}>
+          <AiOutlineLoading3Quarters className="loadingIcon"/>
+          <h4>Loading more posts...</h4>
+        </div>}
+        >
+          {tryGetList ? (
+            <h2>Loading</h2>
+          ) : postList.length === 0 ? (
+            <h2>{message}</h2>
+          ) : (
+            postList.map((post, id) => (
+              <Linkr key={id} post={post} setPostList={setPostList} />
+            ))
+          )}
+        </InfiniteScroll>
       </PostList>
       <FlexTrending>
       <FollowButton visibility={buttonVisible} disabled={disabled} func={followUnfollow} paramid={id} authid={userInfo.id} action={buttonAction}></FollowButton>

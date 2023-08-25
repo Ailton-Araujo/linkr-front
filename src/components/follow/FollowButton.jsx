@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 
 const FollowButton = ({paramid, authid, action, func, disabled, visibility}) => {
-    return <StyledFollowButton visibility={visibility} disabled={disabled} onClick={() => func(action)} id={paramid} userid={authid} action={action}>{action}</StyledFollowButton>;
+    return <StyledFollowButton data-test="follow-btn" visibility={visibility} disabled={disabled} onClick={() => func(action)} id={paramid} userid={authid} action={action}>{action}</StyledFollowButton>;
 };
 
 const StyledFollowButton = styled.button`
