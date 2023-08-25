@@ -4,10 +4,14 @@ import { styled } from "styled-components";
 export default function ShareBox({ setModalIsOpen, repostCount }) {
   return (
     <SCContent>
-      <strong type="button" onClick={() => setModalIsOpen(true)}>
+      <strong
+        type="button"
+        onClick={() => setModalIsOpen(true)}
+        data-test="repost-btn"
+      >
         <SCShareIcon />
       </strong>
-      <span>{repostCount} re-posts</span>
+      <span data-test="repost-counter">{repostCount} re-posts</span>
     </SCContent>
   );
 }
