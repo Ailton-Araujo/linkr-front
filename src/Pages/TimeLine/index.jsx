@@ -56,6 +56,8 @@ export default function TimeLine() {
 
   useInterval(() => {
     function success(data){
+      if (data.length > 0)
+        data.pop();
       setNewPosts(data);
     }
     function failure (error) {
