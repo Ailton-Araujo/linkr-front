@@ -195,11 +195,10 @@ export default function Linkr({ post, setPostList }) {
   }
 
   return (
-    <PostContainer>
+    <PostContainer data-test="post">
       <RepostedBy repost={post.repostedBy} />
 
       <PostStyled
-        data-test="post"
         bg={post.user.image}
         bgspan={meta.image}
         border={openComments}
