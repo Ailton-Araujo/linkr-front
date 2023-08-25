@@ -328,7 +328,6 @@ export default function Linkr({ post, setPostList }) {
 
 const PostContainer = styled.span`
   width: 100%;
-  margin-bottom: 18px;
   .styleToolTip {
     background-color: rgba(255, 255, 255, 0.9);
     color: #505050;
