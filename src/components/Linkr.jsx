@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import CommentsIcon from "../assets/icons/commentsIcon.svg";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import { Tooltip } from "react-tooltip";
 import AuthContext from "../contexts/AuthContext";
@@ -10,6 +11,7 @@ import HashTagsCard from "./HashtagsCard";
 import { postLike, editPost } from "../services/Api";
 import { getMeta } from "../services/MetaApi";
 import DeleteModal from "./DeleteModal";
+import PostComments from "./Comments";
 import RepostedBy from "./RepostedBy";
 import RepostModal from "./RepostModal";
 import ShareBox from "./ShareBox";
@@ -21,6 +23,10 @@ export default function Linkr({ post, setPostList }) {
   const [tryLike, setTryLike] = useState(false);
   const [userLiked, setUserLiked] = useState(
     post.postLikes.includes(userInfo.username)
+  );
+  const [openComments, setOpenComments] = useState(false);
+  const [numComments, setNumComments] = useState(
+    !post.postComments ? 0 : post.postComments.length
   );
   const [message, setMessage] = useState("");
   const [meta, setMeta] = useState({
@@ -192,7 +198,12 @@ export default function Linkr({ post, setPostList }) {
     <PostContainer>
       <RepostedBy repost={post.repostedBy} />
 
-      <PostStyled data-test="post" bg={post.user.image} bgspan={meta.image}>
+      <PostStyled
+        data-test="post"
+        bg={post.user.image}
+        bgspan={meta.image}
+        border={openComments}
+      >
         <section>
           <div></div>
           <button
@@ -210,6 +221,16 @@ export default function Linkr({ post, setPostList }) {
           >
             {post.postLikes.length} likes
           </p>
+          <button
+            data-test="comment-btn"
+            onClick={() => {
+              if (!openComments) setOpenComments(true);
+              if (openComments) setOpenComments(false);
+            }}
+          >
+            <img src={CommentsIcon} />
+          </button>
+          <p data-test="comment-counter">{`${numComments} comments`}</p>
 
           <ShareBox
             setModalIsOpen={setRepostModalIsOpen}
@@ -269,6 +290,16 @@ export default function Linkr({ post, setPostList }) {
           </Link>
         </div>
       </PostStyled>
+      {openComments ? (
+        <PostComments
+          token={auth?.token}
+          postId={post.id}
+          comments={post.postComments}
+          numComments={numComments}
+        />
+      ) : (
+        ""
+      )}
 
       <Tooltip
         id={post.id}
@@ -297,6 +328,7 @@ export default function Linkr({ post, setPostList }) {
 
 const PostContainer = styled.span`
   width: 100%;
+  margin-bottom: 18px;
   .styleToolTip {
     background-color: rgba(255, 255, 255, 0.9);
     color: #505050;
@@ -325,13 +357,16 @@ const EditInput = styled.input`
 const PostStyled = styled.article`
   width: 100%;
   padding: 20px;
-  margin-bottom: 18px;
   position: relative;
   display: flex;
   justify-content: space-between;
   gap: 10px;
   border: none;
-  border-radius: 16px;
+  ${({ border }) => {
+    return border
+      ? `border-radius: 16px 16px 0px 0px;`
+      : ` border-radius:16px;`;
+  }};
   background: #171717;
 
   a:-webkit-any-link {
@@ -343,33 +378,48 @@ const PostStyled = styled.article`
     outline: none;
   }
 
-  > section {
-    position: relative;
+  section {
+    width: 15%;
     font-family: "Lato", sans-serif;
     word-break: break-all;
-    > div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    div:nth-child(1) {
       width: 50px;
       height: 50px;
+      margin-bottom: 15px;
       border-radius: 26.5px;
       background: ${({ bg }) => `url(${bg})`},
         lightgray -2.896px -0.135px / 109.434% 100.538% no-repeat;
       background-size: 50px 50px;
       background-position: center center;
     }
-    button {
+    button:nth-child(2) {
       padding: 0px;
       border: none;
       background: none;
-      position: absolute;
-      top: 65px;
-      left: 12.5px;
+      cursor: pointer;
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
+    button:nth-child(4) {
+      padding: 0px;
+      border: none;
+      background: none;
+      img {
+        width: 25px;
+        height: 25px;
+      }
       cursor: pointer;
       &:disabled {
         cursor: not-allowed;
       }
     }
     p {
-      margin-top: 43px;
+      margin-bottom: 15px;
       color: #fff;
       text-align: center;
       font-size: 11px;
@@ -393,7 +443,7 @@ const PostStyled = styled.article`
   }
 
   div:nth-child(2) {
-    width: calc(100% - 50px);
+    width: calc(100% - 20%);
     font-family: "Lato", sans-serif;
     font-weight: 400;
     h3 {
