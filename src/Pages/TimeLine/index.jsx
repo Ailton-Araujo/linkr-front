@@ -31,7 +31,6 @@ export default function TimeLine() {
       setLoadMorePosts(false);
     }
 
-
     function success(data) {
       if (data.length === 0) {
         setMessage("No posts found from your friends");
@@ -249,4 +248,4 @@ const PostList = styled.div`
   gap: 18px;
 `;
 
-export { TimeLineStyled, PostList };
+export { TimeLineStyled, Content, PostList };

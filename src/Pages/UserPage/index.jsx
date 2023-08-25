@@ -10,17 +10,15 @@ import {
   isFollowing,
   getMoreUserPosts,
 } from "../../services/Api";
-import { TimeLineStyled, PostList } from "../TimeLine";
+import { TimeLineStyled, PostList, Content } from "../TimeLine";
 import { styled } from "styled-components";
 import FollowButton from "../../components/follow/FollowButton";
 import useUserInfo from "../../hooks/useUserInfo";
 import InfiniteScroll from "react-infinite-scroller";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import useFollowers from "../../hooks/useFollowers";
 
 export default function UserPage() {
   const { auth } = useContext(AuthContext);
-  const { setFollowedIds } = useFollowers();
   const [postList, setPostList] = useState([]);
   const [tryGetList, setTryGetList] = useState(false);
   const [loadingName, setLoadingName] = useState(false);
@@ -72,13 +70,7 @@ export default function UserPage() {
 
   function followUnfollow(buttonAction) {
     setDisabled(true);
-    followAndUnfollow(
-      buttonAction,
-      id,
-      auth?.token,
-      enableButton,
-      setFollowedIds
-    );
+    followAndUnfollow(buttonAction, id, auth?.token, enableButton);
   }
 
   const enableButton = (buttonAction) => {
@@ -104,44 +96,10 @@ export default function UserPage() {
   }
 
   return (
-    <Formatter>
-      <TimeLineStyled>
-        <PostList>
-          <FlexUserName>
-            <h1>{loadingName ? "" : `${username}'s posts`}</h1>
-            <FollowButton
-              visibility={buttonVisible}
-              disabled={disabled}
-              func={followUnfollow}
-              paramid={id}
-              authid={userInfo.id}
-              action={buttonAction}
-            ></FollowButton>
-          </FlexUserName>
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={loadMore}
-            hasMore={loadMorePosts}
-            initialLoad={false}
-            loader={
-              <div className="loader" key={0}>
-                <AiOutlineLoading3Quarters className="loadingIcon" />
-                <h4>Loading more posts...</h4>
-              </div>
-            }
-          >
-            {tryGetList ? (
-              <h2>Loading</h2>
-            ) : postList.length === 0 ? (
-              <h2>{message}</h2>
-            ) : (
-              postList.map((post, id) => (
-                <Linkr key={id} post={post} setPostList={setPostList} />
-              ))
-            )}
-          </InfiniteScroll>
-        </PostList>
-        <FlexTrending>
+    <TimeLineStyled>
+      <Content>
+        <FlexUserName>
+          <h1>{loadingName ? "" : `${username}'s posts`}</h1>
           <FollowButton
             visibility={buttonVisible}
             disabled={disabled}
@@ -150,23 +108,51 @@ export default function UserPage() {
             authid={userInfo.id}
             action={buttonAction}
           ></FollowButton>
-          <Spacer
-            buttonVisible={buttonVisible}
-            paramid={id}
-            authid={userInfo.id}
-          ></Spacer>
-          <Trending />
-        </FlexTrending>
-      </TimeLineStyled>
-    </Formatter>
+        </FlexUserName>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadMore}
+          hasMore={loadMorePosts}
+          initialLoad={false}
+          loader={
+            <div className="loader" key={0}>
+              <AiOutlineLoading3Quarters className="loadingIcon" />
+              <h4>Loading more posts...</h4>
+            </div>
+          }
+        >
+          {tryGetList ? (
+            <h2>Loading</h2>
+          ) : postList.length === 0 ? (
+            <h2>{message}</h2>
+          ) : (
+            <PostList>
+              {postList.map((post, id) => (
+                <Linkr key={id} post={post} setPostList={setPostList} />
+              ))}
+            </PostList>
+          )}
+        </InfiniteScroll>
+      </Content>
+      <FlexTrending>
+        <FollowButton
+          visibility={buttonVisible}
+          disabled={disabled}
+          func={followUnfollow}
+          paramid={id}
+          authid={userInfo.id}
+          action={buttonAction}
+        ></FollowButton>
+        <Spacer
+          buttonVisible={buttonVisible}
+          paramid={id}
+          authid={userInfo.id}
+        ></Spacer>
+        <Trending />
+      </FlexTrending>
+    </TimeLineStyled>
   );
 }
-
-const Formatter = styled.div`
-  section > div {
-    align-self: flex-start;
-  }
-`;
 
 const Spacer = styled.div`
   height: ${(props) =>
