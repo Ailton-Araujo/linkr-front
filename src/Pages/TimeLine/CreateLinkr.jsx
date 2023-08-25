@@ -31,6 +31,7 @@ export default function CreateLinkr({ token, setPostList }) {
     function success(data) {
       refLink.current.value = "";
       refText.current.value = "";
+      console.log(data);
       setPostList((prevState) => [data, ...prevState]);
       setTryPublish(false);
     }
