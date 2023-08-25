@@ -1,49 +1,30 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import AuthContext from "./AuthContext";
-import { getUser } from "../services/Api";
+import { getAnyFollower } from "../services/Api";
 
 const FollowersContext = createContext();
 
 export function FollowersProvider({ children }) {
   const [followers, setFollowers] = useState([]);
+  const [followedIds, setFollowedIds] = useState([]);
+  const { auth } = useContext(AuthContext);
 
   useEffect(() => {
     function success(data) {
-      if (data.rowCount === 0) {
-        setTryGetList(false);
-        setLoadMorePosts(false);
-        return setMessage(
-          "You don't follow anyone yet. Search for new friends!"
-        );
-      }
-      getTimeLine(auth?.token, success, failure);
+      setFollowers(data.rows);
+      setFollowedIds(data.rows.map((e) => e.followedId));
     }
-
-    function failureGetFollows() {
-      setMessage("An error occured while trying to fetch your friend's posts");
-      setLoadMorePosts(false);
+    function failure(err) {
+      setFollowers("error");
+      console.log(err);
     }
-
-    const token = auth?.token;
-
-    function success(data) {
-      setUserInfo({ ...data });
-    }
-
-    function failure(error) {
-      if (error.response) {
-        alert(error.response.data);
-        logoutAuth();
-      } else {
-        console.log(error.message);
-        // alert(error.message);
-      }
-    }
-    if (token) getUser(token, success, failure);
-  }, [auth]);
-
+    getAnyFollower(auth?.token, success, failure);
+  }, []);
+  console.log(followedIds);
   return (
-    <FollowersContext.Provider value={{ followers }}>
+    <FollowersContext.Provider
+      value={{ followers, followedIds, setFollowedIds }}
+    >
       {children}
     </FollowersContext.Provider>
   );

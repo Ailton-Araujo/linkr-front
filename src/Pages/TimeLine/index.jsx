@@ -1,6 +1,7 @@
 import { useEffect, useContext, useState } from "react";
 import styled from "styled-components";
 import AuthContext from "../../contexts/AuthContext";
+import useFollowers from "../../hooks/useFollowers";
 import CreateLinkr from "./CreateLinkr";
 import Linkr from "../../components/Linkr";
 import Trending from "../../components/Trending";
@@ -11,6 +12,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function TimeLine() {
   const { auth } = useContext(AuthContext);
+  const { followers } = useFollowers();
   const [postList, setPostList] = useState([]);
   const [tryGetList, setTryGetList] = useState(false);
   const [message, setMessage] = useState("");
@@ -19,20 +21,13 @@ export default function TimeLine() {
 
   useEffect(() => {
     setTryGetList(true);
-    getAnyFollower(auth?.token, successGetFollows, failureGetFollows);
-    function successGetFollows(data) {
-      console.log(data);
-      if (data.rowCount === 0) {
-        setTryGetList(false);
-        setLoadMorePosts(false);
-        return setMessage(
-          "You don't follow anyone yet. Search for new friends!"
-        );
-      }
-      getTimeLine(auth?.token, success, failure);
-    }
 
-    function failureGetFollows() {
+    if (followers.length === 0) {
+      setTryGetList(false);
+      setLoadMorePosts(false);
+      setMessage("You don't follow anyone yet. Search for new friends!");
+    }
+    if (followers === "error") {
       setMessage("An error occured while trying to fetch your friend's posts");
       setLoadMorePosts(false);
     }
@@ -55,6 +50,8 @@ export default function TimeLine() {
       setTryGetList(false);
       setLoadMorePosts(false);
     }
+
+    getTimeLine(auth?.token, success, failure);
   }, []);
 
   useInterval(() => {

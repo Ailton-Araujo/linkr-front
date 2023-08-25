@@ -141,11 +141,12 @@ function isFollowing(id, token, sucessFollowCheck, errorFollowCheck) {
     });
 }
 
-function followAndUnfollow(action, id, token, enableButton) {
+function followAndUnfollow(action, id, token, enableButton, setFollowedIds) {
   if (action === "Follow") {
     axios
       .post(`/follow/${id}`, { body: null }, tokenProvider(token))
       .then((res) => {
+        setFollowedIds((prevState) => [...prevState, Number(id)]);
         enableButton(action);
       })
       .catch((err) => {
@@ -156,6 +157,10 @@ function followAndUnfollow(action, id, token, enableButton) {
     axios
       .delete(`/follow/${id}`, tokenProvider(token))
       .then((res) => {
+        setFollowedIds((prevState) => {
+          console.log(prevState.filter((e) => e !== Number(id)));
+          return prevState.filter((e) => e !== Number(id));
+        });
         enableButton(action);
       })
       .catch((err) => {

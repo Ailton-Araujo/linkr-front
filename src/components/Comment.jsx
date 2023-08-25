@@ -1,13 +1,23 @@
 import { styled } from "styled-components";
+import useFollowers from "../hooks/useFollowers";
 
 export default function Comment({ comment, postAuthorId }) {
+  const { followedIds } = useFollowers();
+
+  console.log(followedIds);
   return (
     <CommentBox data-test="comment" userbg={comment.image}>
       <div></div>
       <div>
         <h4>
           {comment.username}{" "}
-          {comment.id === postAuthorId ? <span>• post’s author </span> : ""}
+          {comment.id === postAuthorId ? (
+            <span>• post’s author </span>
+          ) : followedIds.includes(comment.id) ? (
+            <span>• following</span>
+          ) : (
+            ""
+          )}
         </h4>
         <p>{comment.comment}</p>
       </div>
