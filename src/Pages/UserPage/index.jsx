@@ -16,9 +16,11 @@ import FollowButton from "../../components/follow/FollowButton";
 import useUserInfo from "../../hooks/useUserInfo";
 import InfiniteScroll from "react-infinite-scroller";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import useFollowers from "../../hooks/useFollowers";
 
 export default function UserPage() {
   const { auth } = useContext(AuthContext);
+  const { setFollowedIds } = useFollowers();
   const [postList, setPostList] = useState([]);
   const [tryGetList, setTryGetList] = useState(false);
   const [loadingName, setLoadingName] = useState(false);
@@ -66,11 +68,11 @@ export default function UserPage() {
       setButtonVisible(true);
     }
     getUserPosts(id, auth.token, success, failureUsername);
-  }, []);
+  }, [id]);
 
   function followUnfollow(buttonAction) {
     setDisabled(true);
-    followAndUnfollow(buttonAction, id, auth?.token, enableButton);
+    followAndUnfollow(buttonAction, id, auth?.token, enableButton, setFollowedIds);
   }
 
   const enableButton = (buttonAction) => {
