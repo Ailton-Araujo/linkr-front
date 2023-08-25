@@ -39,7 +39,7 @@ function getTimeLine(token, success, failure) {
 
 function getUserPosts(id, token, success, failure) {
   axios
-    .get(`/posts/users/${id}`, tokenProvider(token))
+    .get(`/posts?user=${id}`, tokenProvider(token))
     .then(({ data }) => {
       success(data);
     })
@@ -151,6 +151,42 @@ function followAndUnfollow (action, id, token, enableButton) {
   };
 };
 
+function getNewPosts(timestamp, beforeOrAfter, token, success, failure) {
+  axios
+    .get(`/timeline?${beforeOrAfter}=${timestamp}`, tokenProvider(token))
+    .then(({ data }) => {
+      success(data);
+    })
+    .catch((error) => {
+      failure(error);
+      console.log(error);
+    });
+}
+
+function getMoreUserPosts(id, offset, token, success, failure) {
+  axios
+    .get(`/posts?user=${id}&offset=${offset * 10}`, tokenProvider(token))
+    .then(({ data }) => {
+      success(data);
+    })
+    .catch((error) => {
+      failure(error);
+      console.log(error);
+    });
+}
+
+function getMoreHashtagPosts(hashtag, offset, token, success, failure) {
+  axios
+    .get(`/hashtag/${hashtag}?offset=${offset * 10}`, tokenProvider(token))
+    .then(({ data }) => {
+      success(data);
+    })
+    .catch((error) => {
+      failure(error);
+      console.log(error);
+    });
+}
+
 
 export {
   getUser,
@@ -166,4 +202,7 @@ export {
   isFollowing,
   followAndUnfollow,
   getAnyFollower,
+  getNewPosts,
+  getMoreUserPosts,
+  getMoreHashtagPosts
 };

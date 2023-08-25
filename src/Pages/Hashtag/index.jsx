@@ -4,6 +4,9 @@ import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import Linkr from "../../components/Linkr";
 import Trending from "../../components/Trending";
+import InfiniteScroll from 'react-infinite-scroller';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { getMoreHashtagPosts} from "../../services/Api";
 
 export default function HashtagPage() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -12,6 +15,8 @@ export default function HashtagPage() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadMorePosts, setLoadMorePosts] = useState(true);
+  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -28,27 +33,53 @@ export default function HashtagPage() {
       .catch((error) => {
         setError(true);
         setLoading(false);
+        setLoadMorePosts(false);
       });
   }, [hashtag]);
+
+  function loadMore() {
+    function success(data){
+      if(data.length > 0)
+        setPosts([...posts, ...data]);
+      else
+        setLoadMorePosts(false);
+    }
+    function failure (error) {
+      console.log(error);
+    }
+    setOffset(offset + 1);
+    getMoreHashtagPosts(hashtag, offset + 1, token, success, failure);
+  }
 
   return (
     <SCContainer>
       <SCTitle data-test="hashtag-title"># {hashtag}</SCTitle>
       <div>
         <SCContent>
+        <InfiniteScroll
+        pageStart={0}
+        loadMore={loadMore}
+        hasMore={loadMorePosts}
+        initialLoad = {false}
+        loader={
+        <div className="loader" key={0}>
+          <AiOutlineLoading3Quarters className="loadingIcon"/>
+          <h4>Loading more posts...</h4>
+        </div>}
+        >
           {loading ? (
             <SCLoading>Loading...</SCLoading>
           ) : (
-            posts.map((post) => (
-              <Linkr key={post.id} post={post} setPostList={setPosts} />
+            posts.map((post, id) => (
+              <Linkr key={id} post={post} setPostList={setPosts} />
             ))
           )}
-
           {error && (
             <SCErrorMessage>
               There was an error loading the posts!
             </SCErrorMessage>
           )}
+          </InfiniteScroll>
         </SCContent>
         <Trending />
       </div>
@@ -78,6 +109,27 @@ const SCContainer = styled.div`
   }
   @media (max-width: 520px) {
     width: 100%;
+  }
+  .loader{
+    margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    height: 70px;
+    justify-content: space-between;
+    align-items: center;
+    color: #6D6D6D;
+    font-family: Lato;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 1.1px;
+  }
+  .loadingIcon{
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    fill: rgba(109, 109, 109, 1)
   }
 `;
 
