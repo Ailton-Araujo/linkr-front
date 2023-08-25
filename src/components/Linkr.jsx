@@ -17,7 +17,7 @@ import RepostModal from "./RepostModal";
 import ShareBox from "./ShareBox";
 
 export default function Linkr({ post, setPostList }) {
-  if (!post.postLikes[0]) post.postLikes.length = 0;
+  if (!post.postLikes) post.postLikes = [];
   const { auth } = useContext(AuthContext);
   const { userInfo } = useUserInfo();
   const [tryLike, setTryLike] = useState(false);
