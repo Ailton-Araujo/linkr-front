@@ -30,8 +30,8 @@ export default function PostComments({
       refComment.current.value = "";
       setTryComment(false);
       setComments((prevState) => [
-        { ...newComment, username: userInfo.username, image: userInfo.image },
         ...prevState,
+        { ...newComment, username: userInfo.username, image: userInfo.image },
       ]);
     }
     function failure(error) {
@@ -60,7 +60,11 @@ export default function PostComments({
             placeholder="write a comment..."
             ref={refComment}
           />
-          <button data-test="comment-input" disabled={tryComment} type="submit">
+          <button
+            data-test="comment-submit"
+            disabled={tryComment}
+            type="submit"
+          >
             {<SendIcon />}
           </button>
         </form>
