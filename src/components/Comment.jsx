@@ -1,15 +1,13 @@
 import { styled } from "styled-components";
-import useUserInfo from "../hooks/useUserInfo";
 
-export default function Comment({ comment }) {
-  const { userInfo } = useUserInfo();
+export default function Comment({ comment, postAuthorId }) {
   return (
     <CommentBox data-test="comment" userbg={comment.image}>
       <div></div>
       <div>
         <h4>
           {comment.username}{" "}
-          {comment.id === userInfo.id ? <span>• post’s author</span> : ""}
+          {comment.id === postAuthorId ? <span>• post’s author </span> : ""}
         </h4>
         <p>{comment.comment}</p>
       </div>

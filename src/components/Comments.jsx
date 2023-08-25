@@ -5,7 +5,13 @@ import useUserInfo from "../hooks/useUserInfo";
 import { postComment } from "../services/Api";
 import Comment from "./Comment";
 
-export default function PostComments({ token, postId, comments, numComments }) {
+export default function PostComments({
+  token,
+  postId,
+  postAuthor,
+  comments,
+  setComments,
+}) {
   const { userInfo } = useUserInfo();
   const [tryComment, setTryComment] = useState(false);
   const refComment = useRef("");
@@ -21,10 +27,15 @@ export default function PostComments({ token, postId, comments, numComments }) {
     };
 
     function success(res) {
-      console.log(res);
+      refComment.current.value = "";
       setTryComment(false);
+      setComments((prevState) => [
+        { ...newComment, username: userInfo.username, image: userInfo.image },
+        ...prevState,
+      ]);
     }
     function failure(error) {
+      refComment.current.value = "";
       console.log(error);
       setTryComment(false);
     }
@@ -33,11 +44,11 @@ export default function PostComments({ token, postId, comments, numComments }) {
   }
   return (
     <CommentsBox data-test="comment-box">
-      {numComments === 0 ? (
+      {comments.length === 0 ? (
         <p>Be the first to comment</p>
       ) : (
         comments.map((comment, index) => (
-          <Comment key={index} comment={comment} />
+          <Comment key={index} comment={comment} postAuthorId={postAuthor.id} />
         ))
       )}
       <InputBox bg={userInfo.image}>
@@ -46,8 +57,8 @@ export default function PostComments({ token, postId, comments, numComments }) {
           <textarea
             data-test="comment-input"
             disabled={tryComment}
-            ref={refComment}
             placeholder="write a comment..."
+            ref={refComment}
           />
           <button data-test="comment-input" disabled={tryComment} type="submit">
             {<SendIcon />}
