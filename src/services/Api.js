@@ -28,8 +28,8 @@ function postLink(newPost, token, success, failure) {
 function getTimeLine(token, success, failure) {
   axios
     .get("/timeline", tokenProvider(token))
-    .then(({ data }) => {
-      success(data);
+    .then((res) => {
+      success(res.data);
     })
     .catch((error) => {
       failure(error);
@@ -112,6 +112,59 @@ function deletePost(id, token) {
   return axios.delete(`/posts/${id}`, tokenProvider(token));
 }
 
+function repostPost(id, token) {
+  return axios.post(`/posts/share/${id}`, {}, tokenProvider(token));
+}
+
+function getAnyFollower(token, successGetFollows, failureGetFollows) {
+  axios
+    .get("/allfollows", tokenProvider(token))
+    .then((res) => {
+      successGetFollows(res.data);
+    })
+    .catch((err) => {
+      failureGetFollows();
+    });
+}
+
+function isFollowing(id, token, sucessFollowCheck, errorFollowCheck) {
+  axios
+    .get(`/follow/${id}`, tokenProvider(token))
+    .then((res) => {
+      if (res?.data.rows.length === 0) {
+        return sucessFollowCheck("Follow");
+      }
+      sucessFollowCheck("Unfollow");
+    })
+    .catch((err) => {
+      errorFollowCheck(err.response?.message);
+    });
+}
+
+function followAndUnfollow(action, id, token, enableButton) {
+  if (action === "Follow") {
+    axios
+      .post(`/follow/${id}`, { body: null }, tokenProvider(token))
+      .then((res) => {
+        enableButton(action);
+      })
+      .catch((err) => {
+        enableButton();
+        alert(`Houve um erro ao executar a ação. ${err.response?.data}`);
+      });
+  } else {
+    axios
+      .delete(`/follow/${id}`, tokenProvider(token))
+      .then((res) => {
+        enableButton(action);
+      })
+      .catch((err) => {
+        alert(`Houve um erro ao executar a ação. ${err.response?.data}`);
+        enableButton();
+      });
+  }
+}
+
 export {
   getUser,
   postLink,
@@ -123,4 +176,8 @@ export {
   postLike,
   postComment,
   deletePost,
+  repostPost,
+  isFollowing,
+  followAndUnfollow,
+  getAnyFollower,
 };

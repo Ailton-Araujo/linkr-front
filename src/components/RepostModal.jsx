@@ -1,24 +1,20 @@
 import Modal from "react-modal";
 import { styled } from "styled-components";
-import { deletePost } from "../services/Api";
+import { repostPost } from "../services/Api";
 
-export default function DeleteModal({
+export default function RepostModal({
   isOpen,
   setModalIsOpen,
   idPost,
   userToken,
-  updatePostList,
 }) {
-  async function handleDeletePost() {
-    deletePost(idPost, userToken)
+  async function handleRepostPost() {
+    repostPost(idPost, userToken)
       .then(({ data }) => {
-        updatePostList((prevState) =>
-          prevState.filter((post) => post.id !== idPost)
-        );
         setModalIsOpen(false);
       })
       .catch((error) => {
-        alert("Unable to delete this post");
+        alert("Unable to reposted this post");
         setModalIsOpen(false);
         console.log(error);
       });
@@ -27,14 +23,14 @@ export default function DeleteModal({
   return (
     <>
       <Modal isOpen={isOpen} style={customStyles} className="Modal">
-        <h1>Are you sure you want to delete this post?</h1>
+        <h1>Do you want to re-post this link?</h1>
 
         <SCButtonGroup>
           <SCNoButton onClick={() => setModalIsOpen(false)} data-test="cancel">
-            No, go back
+            No, cancel
           </SCNoButton>
-          <SCYesButton onClick={() => handleDeletePost()} data-test="confirm">
-            Yes, delete it
+          <SCYesButton onClick={() => handleRepostPost()} data-test="confirm">
+            Yes, share!
           </SCYesButton>
         </SCButtonGroup>
       </Modal>

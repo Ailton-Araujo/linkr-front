@@ -3,8 +3,9 @@ import { styled } from "styled-components";
 import { PiPaperPlaneTiltBold } from "react-icons/pi";
 import useUserInfo from "../hooks/useUserInfo";
 import { postComment } from "../services/Api";
+import Comment from "./Comment";
 
-export default function PostComments({ token, postId, comments }) {
+export default function PostComments({ token, postId, comments, numComments }) {
   const { userInfo } = useUserInfo();
   const [tryComment, setTryComment] = useState(false);
   const refComment = useRef("");
@@ -31,8 +32,14 @@ export default function PostComments({ token, postId, comments }) {
     postComment(newComment, token, success, failure);
   }
   return (
-    <CommentsBox>
-      {temp === 0 ? <p>Be the first to comment</p> : ""}
+    <CommentsBox data-test="comment-box">
+      {numComments === 0 ? (
+        <p>Be the first to comment</p>
+      ) : (
+        comments.map((comment, index) => (
+          <Comment key={index} comment={comment} />
+        ))
+      )}
       <InputBox bg={userInfo.image}>
         <div></div>
         <form onSubmit={handleSubmit}>
@@ -53,7 +60,7 @@ export default function PostComments({ token, postId, comments }) {
 
 const CommentsBox = styled.aside`
   width: 100%;
-  padding: 0px 20px 20px;
+  padding: 10px 20px 20px;
   border-radius: 0 0 16px 16px;
   background: #1e1e1e;
   p {
@@ -64,15 +71,16 @@ const CommentsBox = styled.aside`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    border-bottom: 2px solid #353535;
   }
 `;
 
 const InputBox = styled.div`
+  padding-left: 10px;
   padding-top: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 2px solid #353535;
   div {
     width: 40px;
     height: 40px;
@@ -88,11 +96,11 @@ const InputBox = styled.div`
     height: 40px;
     textarea {
       width: 90%;
-      height: 40px;
+      height: 45px;
       resize: none;
       word-break: break-all;
       vertical-align: middle;
-      padding: 0px 0px 0px 18px;
+      padding: 2px 0px 2px 15px;
       border: none;
       border-radius: 8px 0px 0px 8px;
       background: #252525;
@@ -118,7 +126,7 @@ const InputBox = styled.div`
     }
     button {
       width: 10%;
-      height: 40px;
+      height: 45px;
       padding: 0px;
       vertical-align: middle;
       border: none;

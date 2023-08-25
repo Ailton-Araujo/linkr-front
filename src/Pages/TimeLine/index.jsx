@@ -4,7 +4,7 @@ import AuthContext from "../../contexts/AuthContext";
 import CreateLinkr from "./CreateLinkr";
 import Linkr from "../../components/Linkr";
 import Trending from "../../components/Trending";
-import { getTimeLine } from "../../services/Api";
+import { getAnyFollower, getTimeLine } from "../../services/Api";
 
 export default function TimeLine() {
   const { auth } = useContext(AuthContext);
@@ -14,8 +14,21 @@ export default function TimeLine() {
 
   useEffect(() => {
     setTryGetList(true);
+    getAnyFollower(auth?.token, successGetFollows, failureGetFollows);
+    function successGetFollows (data) {
+      if(data.rowCount === 0) {
+          setTryGetList(false);
+          return setMessage("You don't follow anyone yet. Search for new friends!")
+      }
+      getTimeLine(auth?.token, success, failure);
+    };
+
+    function failureGetFollows () {
+        setMessage("An error occured while trying to fetch your friend's posts")
+    };
+    
     function success(data) {
-      if (data.length === 0) setMessage("There are no posts yet");
+      if (data.length === 0) setMessage("No posts found from your friends");
       setPostList(data);
       setTryGetList(false);
     }
@@ -27,8 +40,7 @@ export default function TimeLine() {
         "An error occured while trying to fetch the posts, please refresh the page"
       );
       setTryGetList(false);
-    }
-    getTimeLine(auth?.token, success, failure);
+    };
   }, []);
 
   return (

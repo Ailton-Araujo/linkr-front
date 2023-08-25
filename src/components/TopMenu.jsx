@@ -85,6 +85,7 @@ const TopMenu = () => {
                       <User>
                         <img src={user.image} alt={user.username} />
                         <p>{user.username}</p>
+                        {user.followed === "True" ? <li>following</li> : ""}
                       </User>
                     </Link>
                   ))
@@ -273,6 +274,12 @@ const Users = styled.div`
   position: sticky;
   border-radius: 0px 0px 8px 8px;
   background-color: rgba(231, 231, 231, 1);
+
+  li {
+    color: #C5C5C5;
+    margin-left: 15px;
+    list-style-position: outside;
+  }
 `;
 
 const User = styled.div`
