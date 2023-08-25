@@ -21,7 +21,6 @@ export default function TimeLine() {
 
   useEffect(() => {
     setTryGetList(true);
-
     if (followers.length === 0) {
       setTryGetList(false);
       setLoadMorePosts(false);
@@ -31,6 +30,7 @@ export default function TimeLine() {
       setMessage("An error occured while trying to fetch your friend's posts");
       setLoadMorePosts(false);
     }
+
 
     function success(data) {
       if (data.length === 0) {
@@ -50,7 +50,6 @@ export default function TimeLine() {
       setTryGetList(false);
       setLoadMorePosts(false);
     }
-
     getTimeLine(auth?.token, success, failure);
   }, []);
 
@@ -90,7 +89,7 @@ export default function TimeLine() {
 
   return (
     <TimeLineStyled>
-      <PostList>
+      <Content>
         <h1>timeline</h1>
         <CreateLinkr token={auth?.token} setPostList={setPostList} />
         {newPosts.length ? (
@@ -129,12 +128,14 @@ export default function TimeLine() {
           ) : postList.length === 0 ? (
             <h2 data-test="message">{message}</h2>
           ) : (
-            postList.map((post, id) => (
-              <Linkr key={id} post={post} setPostList={setPostList} />
-            ))
+            <PostList>
+              {postList.map((post, id) => (
+                <Linkr key={id} post={post} setPostList={setPostList} />
+              ))}
+            </PostList>
           )}
         </InfiniteScroll>
-      </PostList>
+      </Content>
       <Trending />
     </TimeLineStyled>
   );
@@ -156,12 +157,13 @@ const TimeLineStyled = styled.main`
   }
 `;
 
-const PostList = styled.section`
+const Content = styled.section`
   width: 60%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+
   h1 {
     margin-top: 100px;
     margin-bottom: 45px;
@@ -238,6 +240,13 @@ const LoadButton = styled.button`
   @media (max-width: 611px) {
     width: 320px;
   }
+`;
+
+const PostList = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 18px;
 `;
 
 export { TimeLineStyled, PostList };
