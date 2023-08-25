@@ -30,6 +30,9 @@ export default function TimeLine() {
     };
 
     function failureGetFollows () {
+       alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
+        );
         setMessage("An error occured while trying to fetch your friend's posts")
         setLoadMorePosts(false);
     };
