@@ -64,8 +64,8 @@ export default function TimeLine() {
     let ts = (new Date(Date.now())).toISOString();
     if (postList.length > 0 && postList[0].timestamp) {
       ts = postList[0].timestamp;
-      getNewPosts(ts, "after", auth.token, success, failure);
     }
+    getNewPosts(ts, "after", auth.token, success, failure);
   }, 15000);
 
   function loadMore() {
