@@ -10,6 +10,9 @@ import HashTagsCard from "./HashtagsCard";
 import { postLike, editPost } from "../services/Api";
 import { getMeta } from "../services/MetaApi";
 import DeleteModal from "./DeleteModal";
+import RepostedBy from "./RepostedBy";
+import RepostModal from "./RepostModal";
+import ShareBox from "./ShareBox";
 
 export default function Linkr({ post, setPostList }) {
   if (!post.postLikes[0]) post.postLikes.length = 0;
@@ -30,7 +33,8 @@ export default function Linkr({ post, setPostList }) {
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState(post.description);
   const [original, setOriginal] = useState(post.description);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+  const [repostModalIsOpen, setRepostModalIsOpen] = useState(false);
   const inputReference = useRef(null);
 
   useEffect(() => {
@@ -136,7 +140,7 @@ export default function Linkr({ post, setPostList }) {
   }
 
   function openDeleteModal() {
-    setModalIsOpen(true);
+    setDeleteModalIsOpen(true);
   }
 
   function handleChange(e) {
@@ -186,6 +190,8 @@ export default function Linkr({ post, setPostList }) {
 
   return (
     <PostContainer>
+      <RepostedBy repost={post.repostedBy} />
+
       <PostStyled data-test="post" bg={post.user.image} bgspan={meta.image}>
         <section>
           <div></div>
@@ -204,6 +210,11 @@ export default function Linkr({ post, setPostList }) {
           >
             {post.postLikes.length} likes
           </p>
+
+          <ShareBox
+            setModalIsOpen={setRepostModalIsOpen}
+            repostCount={post.repostCount}
+          />
         </section>
         <div>
           <form onSubmit={(e) => handleSubmit(e, post.id)}>
@@ -258,6 +269,7 @@ export default function Linkr({ post, setPostList }) {
           </Link>
         </div>
       </PostStyled>
+
       <Tooltip
         id={post.id}
         render={({ content }) => <p data-test="tooltip">{content}</p>}
@@ -265,9 +277,16 @@ export default function Linkr({ post, setPostList }) {
         className="styleToolTip"
       />
 
+      <RepostModal
+        isOpen={repostModalIsOpen}
+        setModalIsOpen={setRepostModalIsOpen}
+        idPost={post.id}
+        userToken={auth.token}
+      />
+
       <DeleteModal
-        isOpen={modalIsOpen}
-        setModalIsOpen={setModalIsOpen}
+        isOpen={deleteModalIsOpen}
+        setModalIsOpen={setDeleteModalIsOpen}
         idPost={post.id}
         userToken={auth.token}
         updatePostList={setPostList}
@@ -324,11 +343,11 @@ const PostStyled = styled.article`
     outline: none;
   }
 
-  section {
+  > section {
     position: relative;
     font-family: "Lato", sans-serif;
     word-break: break-all;
-    div {
+    > div:first-child {
       width: 50px;
       height: 50px;
       border-radius: 26.5px;

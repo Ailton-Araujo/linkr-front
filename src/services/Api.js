@@ -101,6 +101,10 @@ function deletePost(id, token) {
   return axios.delete(`/posts/${id}`, tokenProvider(token));
 }
 
+function repostPost(id, token) {
+  return axios.post(`/posts/share/${id}`, {}, tokenProvider(token));
+}
+
 function getAnyFollower (token, successGetFollows, failureGetFollows) {
     axios.get("/allfollows", tokenProvider(token))
     .then((res) => {
@@ -147,6 +151,7 @@ function followAndUnfollow (action, id, token, enableButton) {
   };
 };
 
+
 export {
   getUser,
   postLink,
@@ -157,6 +162,7 @@ export {
   editPost,
   postLike,
   deletePost,
+  repostPost,
   isFollowing,
   followAndUnfollow,
   getAnyFollower,
