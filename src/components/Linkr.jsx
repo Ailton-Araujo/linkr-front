@@ -313,6 +313,7 @@ export default function Linkr({ post, setPostList }) {
         setModalIsOpen={setRepostModalIsOpen}
         idPost={post.id}
         userToken={auth.token}
+        post={post}
       />
 
       <DeleteModal

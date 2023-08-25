@@ -7,11 +7,13 @@ export default function RepostModal({
   setModalIsOpen,
   idPost,
   userToken,
+  post
 }) {
   async function handleRepostPost() {
     repostPost(idPost, userToken)
       .then(({ data }) => {
         setModalIsOpen(false);
+        post.repostCount++;
       })
       .catch((error) => {
         alert("Unable to reposted this post");
